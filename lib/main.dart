@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     answer = api.ask(question: "Who are you?", context: "My name is Hannah.");
-    logger.log("WHATS HAPPENING $answer");
+    answer.then((value) => logger.log("WHATS HAPPENING $value"));
   }
 
   @override
