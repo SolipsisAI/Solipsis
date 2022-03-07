@@ -11,4 +11,4 @@ crate-type = ["cdylib", "staticlib"]
 [dependencies]
 anyhow = "1"
 flutter_rust_bridge = "1"
-cortex = { path = "../../rust_cortex" }
+rust-bert = "0.17.0"
