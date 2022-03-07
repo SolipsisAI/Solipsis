@@ -1,3 +1,4 @@
+import 'dart:developer' as logger;
 import 'package:flutter/material.dart';
 import 'ffi.dart';
 
@@ -55,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     answer = api.ask(question: "Who are you?", context: "My name is Hannah.");
+    logger.log("WHATS HAPPENING $answer");
   }
 
   @override
@@ -96,17 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
               future: Future.wait([answer]),
               builder: (context, snap) {
                 final style = Theme.of(context).textTheme.headline4;
-                if (snap.error != null) {
-                  debugPrint(snap.error.toString());
-                  return Tooltip(
-                    message: snap.error.toString(),
-                    child: Text('Unknown OS', style: style),
-                  );
-                }
-
-                final data = snap.data;
-                if (data == null) return const CircularProgressIndicator();
-
                 final text = "Name: $answer";
                 return Text(text, style: style);
               },
