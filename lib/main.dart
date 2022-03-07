@@ -49,14 +49,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<Platform> platform;
-  late Future<bool> isRelease;
+  late Future<String> answer;
 
   @override
   void initState() {
     super.initState();
-    platform = api.platform();
-    isRelease = api.rustReleaseMode();
+    answer = api.ask(question: "Who are you?", context: "My name is Hannah.");
   }
 
   @override
@@ -95,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             const Text("You're running on"),
             FutureBuilder<List<dynamic>>(
-              future: Future.wait([platform, isRelease]),
+              future: Future.wait([answer]),
               builder: (context, snap) {
                 final style = Theme.of(context).textTheme.headline4;
                 if (snap.error != null) {
@@ -109,19 +107,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 final data = snap.data;
                 if (data == null) return const CircularProgressIndicator();
 
-                final Platform platform = data[0];
-                final release = data[1] ? 'Release' : 'Debug';
-                final text = const {
-                      Platform.Android: 'Android',
-                      Platform.Ios: 'iOS',
-                      Platform.MacApple: 'MacOS with Apple Silicon',
-                      Platform.MacIntel: 'MacOS',
-                      Platform.Windows: 'Windows',
-                      Platform.Unix: 'Unix',
-                      Platform.Wasm: 'the Web',
-                    }[platform] ??
-                    'Unknown OS';
-                return Text(text + ' ($release)', style: style);
+                final text = "Name: $answer";
+                return Text(text, style: style);
               },
             )
           ],
