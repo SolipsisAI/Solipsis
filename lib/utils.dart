@@ -1,5 +1,7 @@
-import 'dart:io' show Directory;
 import 'dart:developer' as logger;
+
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -17,4 +19,14 @@ void downloadModelFiles() {
 
   logger.log("[DOWNLOAD] Downloading model files..");
   uris.map((uri) async => {await client.get(uri)});
+}
+
+Future<File> download(String url, String filename) async {
+  String appdir = (await getApplicationSupportDirectory()).path;
+  final client = http.Client();
+  final response = await client.get(Uri.parse(url));
+  final bytes = response.bodyBytes;
+  File file = File('$appdir/$filename');
+  await file.writeAsBytes(bytes);
+  return file;
 }
