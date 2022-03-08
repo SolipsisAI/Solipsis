@@ -32,12 +32,9 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
   final _bot = const types.User(id: '09778d0f-fb94-4ac6-8d72-96112805f3ad');
 
-  late Classifier _classifier;
-
   @override
   void initState() {
     super.initState();
-    _classifier = Classifier();
     for (var i = 0; i < widget.chatMessages.length; i++) {
       setState(() {
         _messages.insert(
@@ -77,16 +74,8 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
 
   Future<void> _handleBotResponse(String text) async {
     _showTyping = true;
-
-    final sentiment = _classifier.classify(text);
-
-    var responseText = "";
-
-    if (sentiment == 0) {
-      responseText = "You are being negative";
-    } else {
-      responseText = "You are being positive";
-    }
+    final modelDirPath = await getModelDirPath("dialogpt-medium");
+    final responseText = await api.chat(modelDirPath: modelDirPath, text: text);
 
     final message = types.TextMessage(
         author: _bot,
