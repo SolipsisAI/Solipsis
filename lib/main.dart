@@ -1,8 +1,10 @@
 import 'dart:developer' as logger;
 import 'package:flutter/material.dart';
 import 'ffi.dart';
+import 'utils.dart';
 
 void main() {
+  downloadModelFiles();
   runApp(const MyApp());
 }
 
