@@ -197,6 +197,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5827cebf4670468b8772dd191856768aedcb1b0278a04f989f7766351917b9dc"
 
 [[package]]
+name = "cortex"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "rust-bert",
+]
+
+[[package]]
 name = "cpufeatures"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -836,8 +844,8 @@ name = "native"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "cortex",
  "flutter_rust_bridge",
- "rust-bert",
 ]
 
 [[package]]
