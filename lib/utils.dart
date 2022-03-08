@@ -21,10 +21,14 @@ void downloadModelFiles() async {
   String appdirpath = (await getApplicationSupportDirectory()).path;
   final downloaddir = await Directory('$appdirpath/cortex/models/distilbert-qa')
       .create(recursive: true);
-  downloads.map((d) => download(d['url'], d['filename'], downloaddir.path));
+  for (var i = 0; i < downloads.length; i++) {
+    var download = downloads[i];
+    logger.log("[DOWNLOAD] ${download['url']}");
+    downloadFile(download['url'], download['filename'], downloaddir.path);
+  }
 }
 
-Future<File> download(
+Future<File> downloadFile(
     String? url, String? filename, String? downloaddir) async {
   final client = http.Client();
   final response = await client.get(Uri.parse(url!));

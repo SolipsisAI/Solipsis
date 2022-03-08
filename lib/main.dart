@@ -4,7 +4,6 @@ import 'ffi.dart';
 import 'utils.dart';
 
 void main() {
-  downloadModelFiles();
   runApp(const MyApp());
 }
 
@@ -57,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    downloadModelFiles();
     answer = api.ask(question: "Who are you?", context: "My name is Hannah.");
     answer.then((value) => {logger.log("WHATS HAPPENING $value")});
   }
