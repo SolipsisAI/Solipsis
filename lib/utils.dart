@@ -29,14 +29,20 @@ void downloadModelFiles() async {
   }
 }
 
-Future<File> downloadFile(
-    String? url, String? filename, String? downloaddir) async {
+void downloadFile(String? url, String? filename, String? downloaddir) async {
+  String filepath = '$downloaddir/$filename';
+
+  if (File(filepath).existsSync()) {
+    return;
+  }
+
   final client = http.Client();
   final response = await client.get(Uri.parse(url!));
   final bytes = response.bodyBytes;
-  String filepath = '$downloaddir/$filename';
+
   File file = File(filepath);
+
   await file.writeAsBytes(bytes);
+
   logger.log("[SUCCESS] Downloaded $filepath");
-  return file;
 }
