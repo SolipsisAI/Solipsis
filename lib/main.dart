@@ -51,14 +51,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late Future<String> answer;
+  late Future<String> modelDirPath;
 
   @override
   void initState() {
     super.initState();
     downloadModelFiles();
-    answer = api.ask(question: "Who are you?", context: "My name is Hannah.");
-    answer.then((value) => {logger.log("WHATS HAPPENING $value")});
+    modelDirPath = getModelDirPath();
+    modelDirPath
+        .then((path) => getAnswer(path, "Who am I?", "I'm Jean Valjean."));
+  }
+
+  void getAnswer(String modelDirPath, String question, String context) {
+    final answer = api.askMe(
+        modelDirPath: modelDirPath, question: question, context: context);
+    answer.then((value) => logger.log("answer: $value"));
   }
 
   @override
@@ -97,10 +104,10 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             const Text("You're running on"),
             FutureBuilder<List<dynamic>>(
-              future: Future.wait([answer]),
+              future: Future.wait([modelDirPath]),
               builder: (context, snap) {
                 final style = Theme.of(context).textTheme.headline4;
-                final text = "Name: $answer";
+                const text = "Name:";
                 return Text(text, style: style);
               },
             )

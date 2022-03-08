@@ -17,6 +17,11 @@ const downloads = [
   {'url': vocabUrl, 'filename': 'vocab.txt'}
 ];
 
+Future<String> getModelDirPath() async {
+  String appdirpath = (await getApplicationSupportDirectory()).path;
+  return '$appdirpath/cortex/models/distilbert-qa';
+}
+
 void downloadModelFiles() async {
   String appdirpath = (await getApplicationSupportDirectory()).path;
   logger.log(appdirpath);
