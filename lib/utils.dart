@@ -19,6 +19,7 @@ const downloads = [
 
 void downloadModelFiles() async {
   String appdirpath = (await getApplicationSupportDirectory()).path;
+  logger.log(appdirpath);
   final downloaddir = await Directory('$appdirpath/cortex/models/distilbert-qa')
       .create(recursive: true);
   for (var i = 0; i < downloads.length; i++) {
