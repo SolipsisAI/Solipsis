@@ -7,6 +7,6 @@ pub fn ask_me(model_dir_path: String, question: String, context: String) -> Stri
 }
 
 pub fn chat(model_dir_path: String, text: String) -> String {
-    let manager = DialogueManager(model_dir_path);
+    let mut manager = DialogueManager::new(model_dir_path);
     manager.send(text)
 }
