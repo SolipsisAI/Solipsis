@@ -17,6 +17,9 @@ abstract class Native {
       required String question,
       required String context,
       dynamic hint});
+
+  Future<String> chat(
+      {required String modelDirPath, required String text, dynamic hint});
 }
 
 class NativeImpl extends FlutterRustBridgeBase<NativeWire> implements Native {
@@ -42,6 +45,20 @@ class NativeImpl extends FlutterRustBridgeBase<NativeWire> implements Native {
           argNames: ["modelDirPath", "question", "context"],
         ),
         argValues: [modelDirPath, question, context],
+        hint: hint,
+      ));
+
+  Future<String> chat(
+          {required String modelDirPath, required String text, dynamic hint}) =>
+      executeNormal(FlutterRustBridgeTask(
+        callFfi: (port_) => inner.wire_chat(
+            port_, _api2wire_String(modelDirPath), _api2wire_String(text)),
+        parseSuccessData: _wire2api_String,
+        constMeta: const FlutterRustBridgeTaskConstMeta(
+          debugName: "chat",
+          argNames: ["modelDirPath", "text"],
+        ),
+        argValues: [modelDirPath, text],
         hint: hint,
       ));
 
@@ -123,6 +140,26 @@ class NativeWire implements FlutterRustBridgeWireBase {
   late final _wire_ask_me = _wire_ask_mePtr.asFunction<
       void Function(int, ffi.Pointer<wire_uint_8_list>,
           ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_chat(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> model_dir_path,
+    ffi.Pointer<wire_uint_8_list> text,
+  ) {
+    return _wire_chat(
+      port_,
+      model_dir_path,
+      text,
+    );
+  }
+
+  late final _wire_chatPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_chat');
+  late final _wire_chat = _wire_chatPtr.asFunction<
+      void Function(
+          int, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
 
   ffi.Pointer<wire_uint_8_list> new_uint_8_list(
     int len,

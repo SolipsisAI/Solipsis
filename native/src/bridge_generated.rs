@@ -38,6 +38,26 @@ pub extern "C" fn wire_ask_me(
     )
 }
 
+#[no_mangle]
+pub extern "C" fn wire_chat(
+    port_: i64,
+    model_dir_path: *mut wire_uint_8_list,
+    text: *mut wire_uint_8_list,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "chat",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_model_dir_path = model_dir_path.wire2api();
+            let api_text = text.wire2api();
+            move |task_callback| Ok(chat(api_model_dir_path, api_text))
+        },
+    )
+}
+
 // Section: wire structs
 
 #[repr(C)]
