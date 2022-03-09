@@ -78,6 +78,14 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   }
 
   Future<void> _handleBotResponse(String text) async {
+    final filesWereDownloaded =
+        await verifyModelFilesDownloaded("dialogpt-medium");
+
+    if (filesWereDownloaded == false) {
+      logger.log("[WARNING] Files still downloading...");
+      return;
+    }
+
     _showTyping = true;
     final modelDirPath = widget.modelDir.path;
     final responseText = await api.chat(modelDirPath: modelDirPath, text: text);
