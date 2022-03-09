@@ -26,6 +26,10 @@ void wire_chat(int64_t port_,
                struct wire_uint_8_list *model_dir_path,
                struct wire_uint_8_list *text);
 
+void wire_summarize(int64_t port_,
+                    struct wire_uint_8_list *model_dir_path,
+                    struct wire_uint_8_list *text);
+
 struct wire_uint_8_list *new_uint_8_list(int32_t len);
 
 void free_WireSyncReturnStruct(struct WireSyncReturnStruct val);
@@ -36,6 +40,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     int64_t dummy_var = 0;
     dummy_var ^= ((int64_t) (void*) wire_ask_me);
     dummy_var ^= ((int64_t) (void*) wire_chat);
+    dummy_var ^= ((int64_t) (void*) wire_summarize);
     dummy_var ^= ((int64_t) (void*) new_uint_8_list);
     dummy_var ^= ((int64_t) (void*) free_WireSyncReturnStruct);
     dummy_var ^= ((int64_t) (void*) store_dart_post_cobject);
