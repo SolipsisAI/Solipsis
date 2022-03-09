@@ -1,109 +1,119 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'layouts/two_columns.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:isar/isar.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'models/chat_message.dart';
+import 'models/chat_user.dart';
+import 'conversation.dart';
 import 'utils.dart';
 
-void main() {
-  runApp(MaterialApp(
-    title: 'Flutter Demo',
-    debugShowCheckedModeBanner: false,
-    theme: ThemeData(primarySwatch: Colors.blue),
-    home: HomePage(),
-  ));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Isar
+  final dir = await getApplicationSupportDirectory();
+  final Isar _isar = await Isar.open(
+      schemas: [ChatMessageSchema, ChatUserSchema], directory: dir.path);
+  final chatMessages = await _isar.chatMessages.where().findAll();
+
+  // Download files
+  final modelDir = await downloadModelFiles("dialogpt-medium");
+
+  runApp(ElizaApp(modelDir: modelDir, isar: _isar, chatMessages: chatMessages));
 }
 
-class HomePage extends StatefulWidget {
+class ElizaApp extends StatelessWidget {
+  const ElizaApp(
+      {Key? key,
+      required this.modelDir,
+      required this.isar,
+      required this.chatMessages})
+      : super(key: key);
+
+  final Directory modelDir;
+  final Isar isar;
+  final List<ChatMessage> chatMessages;
+
+  static const String _title = 'Eliza';
+
   @override
-  _HomePageState createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: _title,
+          home: MyStatefulWidget(
+              modelDir: modelDir, isar: isar, chatMessages: chatMessages),
+        ));
+  }
 }
 
-class _HomePageState extends State<HomePage> {
-  // demo content
-  List<types.User> items = [botUser];
-  ValueNotifier<types.User?> _selected = ValueNotifier(null);
+class MyStatefulWidget extends StatefulWidget {
+  const MyStatefulWidget(
+      {Key? key,
+      required this.modelDir,
+      required this.isar,
+      required this.chatMessages})
+      : super(key: key);
 
-  void _selectValue(types.User? val) => _selected.value = val;
-  void _clearSelected() => _selected.value = null;
+  final Directory modelDir;
+  final Isar isar;
+  final List<ChatMessage> chatMessages;
+
+  @override
+  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[300],
-      appBar: AppBar(title: Text('Home page')),
-      body: ValueListenableBuilder(
-        builder: (context, _, child) {
-          return TwoColumns(
-            paneProportion: 30,
-            showPane2: (_selected.value != null) ? true : false,
-            onClosePane2Popup: _clearSelected,
-            pane1: ConversationList(items: items, selectValue: _selectValue),
-            pane2: ConversationView(value: _selected.value),
-          );
-        },
-        valueListenable: _selected,
-      ),
-    );
-  }
-}
-
-class ConversationList extends StatelessWidget {
-  final void Function(types.User?) selectValue;
-  final List<types.User> items;
-  const ConversationList({required this.selectValue, this.items = const []});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: ListView(
-        children: [
-          ...items.map(
-            (e) => Card(
-              child: ListTile(
-                title: Text("${e.firstName} ${e.lastName}"),
-                onTap: () => selectValue(e),
+      body: Row(
+        children: <Widget>[
+          NavigationRail(
+            backgroundColor: const Color(0xff1f2225),
+            selectedLabelTextStyle: const TextStyle(color: Color(0xffffffff)),
+            selectedIconTheme: const IconThemeData(color: Color(0xffffffff)),
+            unselectedLabelTextStyle: const TextStyle(color: Color(0xff808183)),
+            unselectedIconTheme: const IconThemeData(color: Color(0xff808183)),
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: (int index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            labelType: NavigationRailLabelType.selected,
+            destinations: const <NavigationRailDestination>[
+              NavigationRailDestination(
+                icon: Icon(Icons.chat_bubble_outline),
+                selectedIcon: Icon(Icons.chat_bubble),
+                label: Text('Chat'),
               ),
-            ),
+              NavigationRailDestination(
+                icon: Icon(Icons.library_books_outlined),
+                selectedIcon: Icon(Icons.library_books),
+                label: Text('Docs'),
+              ),
+            ],
+          ),
+          const VerticalDivider(
+              thickness: 1, width: 1, color: Color(0xff474747)),
+          // This is the main content.
+          Expanded(
+            child: ConversationHome(),
           )
         ],
-      ),
-    );
-  }
-}
-
-class ConversationView extends StatelessWidget {
-  final types.User? value;
-
-  const ConversationView({Key? key, this.value}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 48.0),
-        child: Padding(
-            padding: const EdgeInsets.all(48),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Item card',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline5!
-                      .copyWith(color: Colors.blue[300]),
-                ),
-                SizedBox(height: 48),
-                (value != null)
-                    ? Text('User ${value!.id}')
-                    : Text(
-                        'No Selected value .',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(color: Colors.red[300]),
-                      ),
-              ],
-            )),
       ),
     );
   }
