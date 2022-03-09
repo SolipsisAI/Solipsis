@@ -11,49 +11,137 @@ import 'package:path_provider/path_provider.dart';
 const String loremIpsumApiUrl =
     'https://litipsum.com/api/dr-jekyll-and-mr-hyde/1/json';
 const int wordsPerMinute = 100;
-const modelUrl =
-    "https://huggingface.co/dbmdz/bert-large-cased-finetuned-conll03-english/resolve/main/rust_model.ot";
-const configUrl =
-    "https://huggingface.co/bert-large-cased-whole-word-masking-finetuned-squad/resolve/main/config.json";
-const vocabUrl =
-    "https://huggingface.co/bert-large-cased-whole-word-masking-finetuned-squad/resolve/main/vocab.txt";
-const downloads = [
-  {'url': modelUrl, 'filename': 'rust_model.ot'},
-  {'url': configUrl, 'filename': 'config.json'},
-  {'url': vocabUrl, 'filename': 'vocab.txt'}
-];
+
+const resources = {
+  'distilbart-cnn-12-6': {
+    'model': {
+      'url':
+          'https://huggingface.co/sshleifer/distilbart-cnn-12-6/resolve/main/rust_model.ot',
+      'filename': 'rust_model.ot',
+      'type': 'bytes',
+    },
+    'config': {
+      'url':
+          'https://cdn.huggingface.co/sshleifer/distilbart-cnn-12-6/config.json',
+      'filename': 'config.json',
+      'type': 'string',
+    },
+    'merges': {
+      'url':
+          'https://cdn.huggingface.co/sshleifer/distilbart-cnn-12-6/merges.txt',
+      'filename': 'merges.txt',
+      'type': 'string',
+    },
+    'vocab': {
+      'url':
+          'https://cdn.huggingface.co/sshleifer/distilbart-cnn-12-6/vocab.json',
+      'filename': 'vocab.json',
+      'type': 'string'
+    }
+  },
+  'dialogpt-medium': {
+    'model': {
+      'url':
+          'https://huggingface.co/microsoft/DialoGPT-medium/resolve/main/rust_model.ot',
+      'filename': 'rust_model.ot',
+      'type': 'bytes',
+    },
+    'merges': {
+      'url':
+          'https://huggingface.co/microsoft/DialoGPT-medium/resolve/main/merges.txt',
+      'filename': 'merges.txt',
+      'type': 'string',
+    },
+    'vocab': {
+      'url':
+          'https://huggingface.co/microsoft/DialoGPT-medium/resolve/main/vocab.json',
+      'filename': 'vocab.json',
+      'type': 'string',
+    },
+    'config': {
+      'url':
+          'https://huggingface.co/microsoft/DialoGPT-medium/resolve/main/config.json',
+      'filename': 'config.json',
+      'type': 'string',
+    }
+  }
+};
 
 Future<String> getModelDirPath(String modelName) async {
   String appdirpath = (await getApplicationSupportDirectory()).path;
   return '$appdirpath/cortex/models/$modelName';
 }
 
-void downloadModelFiles() async {
-  String appdirpath = (await getApplicationSupportDirectory()).path;
-  logger.log(appdirpath);
-  final downloaddir = await Directory('$appdirpath/cortex/models/distilbert-qa')
-      .create(recursive: true);
-  for (var i = 0; i < downloads.length; i++) {
-    var download = downloads[i];
-    logger.log("[DOWNLOAD] ${download['url']}");
-    downloadFile(download['url'], download['filename'], downloaddir.path);
+Future<bool> verifyModelFilesDownloaded(String modelName) async {
+  final resource = resources[modelName];
+
+  // TODO: This is not correct
+  if (resource == null) {
+    return false;
   }
+
+  var isDownloaded = true;
+
+  final modelDirPath = await getModelDirPath(modelName);
+  final modelDir = Directory(modelDirPath);
+
+  if (modelDir.existsSync() == false) {
+    return false;
+  }
+
+  for (var v in resource.values) {
+    var file = File("$modelDirPath/${v['filename']}");
+    if (file.existsSync() == false) {
+      isDownloaded = false;
+      break;
+    }
+  }
+
+  return isDownloaded;
 }
 
-void downloadFile(String? url, String? filename, String? downloaddir) async {
+Future<Directory> downloadModelFiles(String modelName) async {
+  String appdirpath = (await getApplicationSupportDirectory()).path;
+
+  logger.log('[APPDIR] $appdirpath');
+
+  final downloaddir = await Directory('$appdirpath/cortex/models/$modelName')
+      .create(recursive: true);
+
+  final resource = resources[modelName];
+
+  if (resource != null) {
+    for (var v in resource.values) {
+      downloadFile(v['url'], v['filename'], v['type'], downloaddir.path);
+    }
+  } else {
+    logger.log("[FAIL] Resource $modelName does not exist");
+  }
+
+  return downloaddir;
+}
+
+void downloadFile(
+    String? url, String? filename, String? type, String? downloaddir) async {
   String filepath = '$downloaddir/$filename';
 
+  logger.log('[DOWNLOAD] $url -> $filepath');
+
   if (File(filepath).existsSync()) {
+    logger.log('[SKIP] Exists');
     return;
   }
 
   final client = http.Client();
   final response = await client.get(Uri.parse(url!));
-  final bytes = response.bodyBytes;
 
   File file = File(filepath);
 
-  await file.writeAsBytes(bytes);
+  if (type == 'bytes') {
+    await file.writeAsBytes(response.bodyBytes);
+  } else {
+    await file.writeAsString(response.body);
+  }
 
   logger.log("[SUCCESS] Downloaded $filepath");
 }

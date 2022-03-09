@@ -1,5 +1,6 @@
 import 'dart:developer' as logger;
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
@@ -13,9 +14,13 @@ import 'utils.dart';
 
 class SolipsisChatHome extends StatefulWidget {
   const SolipsisChatHome(
-      {Key? key, required this.isar, required this.chatMessages})
+      {Key? key,
+      required this.modelDir,
+      required this.isar,
+      required this.chatMessages})
       : super(key: key);
 
+  final Directory modelDir;
   final Isar isar;
   final List<ChatMessage> chatMessages;
 
@@ -73,8 +78,16 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   }
 
   Future<void> _handleBotResponse(String text) async {
+    final filesWereDownloaded =
+        await verifyModelFilesDownloaded("dialogpt-medium");
+
+    if (filesWereDownloaded == false) {
+      logger.log("[WARNING] Files still downloading...");
+      return;
+    }
+
     _showTyping = true;
-    final modelDirPath = await getModelDirPath("dialogpt-medium");
+    final modelDirPath = widget.modelDir.path;
     final responseText = await api.chat(modelDirPath: modelDirPath, text: text);
 
     final message = types.TextMessage(
