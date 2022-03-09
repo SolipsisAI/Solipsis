@@ -12,8 +12,8 @@ const String loremIpsumApiUrl =
     'https://litipsum.com/api/dr-jekyll-and-mr-hyde/1/json';
 const int wordsPerMinute = 100;
 
-const downloads = [
-  {
+const resources = {
+  'distilbart-cnn-12-6': {
     'model': {
       'url':
           'https://huggingface.co/sshleifer/distilbart-cnn-12-6/resolve/main/rust_model.ot',
@@ -39,23 +39,29 @@ const downloads = [
       'type': 'string'
     }
   }
-];
+};
 
 Future<String> getModelDirPath(String modelName) async {
   String appdirpath = (await getApplicationSupportDirectory()).path;
   return '$appdirpath/cortex/models/$modelName';
 }
 
-void downloadModelFiles() async {
+void downloadModelFiles(String modelName) async {
   String appdirpath = (await getApplicationSupportDirectory()).path;
-  logger.log(appdirpath);
-  final downloaddir = await Directory('$appdirpath/cortex/models/distilbert-qa')
+
+  logger.log('[APPDIR] $appdirpath');
+
+  final downloaddir = await Directory('$appdirpath/cortex/models/$modelName')
       .create(recursive: true);
-  for (var i = 0; i < downloads.length; i++) {
-    var download = downloads[i];
-    for (var v in download.values) {
+
+  final resource = resources[modelName];
+
+  if (resource != null) {
+    for (var v in resource.values) {
       downloadFile(v['url'], v['filename'], v['type'], downloaddir.path);
     }
+  } else {
+    logger.log("[FAIL] Resource $modelName does not exist");
   }
 }
 
