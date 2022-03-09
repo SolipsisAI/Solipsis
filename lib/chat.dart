@@ -31,6 +31,7 @@ class SolipsisChatHome extends StatefulWidget {
 class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   bool _showTyping = false;
   int _page = 0;
+  int _selectedIndex = 0;
 
   List<types.Message> _messages = [];
 
@@ -158,7 +159,9 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Eliza"), backgroundColor: const Color(0xff212429)),
+        title: const Text("Eliza"),
+        backgroundColor: const Color(0xff212429),
+      ),
       endDrawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the drawer if there isn't enough vertical
@@ -195,38 +198,70 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
         ),
       ),
       body: SafeArea(
-        bottom: false,
-        child: Chat(
-          messages: _messages,
-          onSendPressed: _handleSendPressed,
-          user: _user,
-          bubbleBuilder: _bubbleBuilder,
-          onEndReached: _handleEndReached,
-          showTyping: _showTyping,
-          showUserAvatars: true,
-          showUserNames: true,
-          theme: const DarkChatTheme(
-              backgroundColor: Color(0xff141414),
-              receivedMessageBodyTextStyle: TextStyle(
-                  color: neutral7,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w300,
-                  height: 1.5),
-              sentMessageBodyTextStyle: TextStyle(
-                  color: neutral7,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w300,
-                  height: 1.5),
-              inputTextStyle: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w300,
-                height: 1.5,
-              ),
-              inputBackgroundColor: Color(0xff2d2d2d),
-              inputMargin: EdgeInsets.all(10),
-              inputBorderRadius: BorderRadius.all(Radius.circular(25))),
-        ),
-      ),
+          bottom: false,
+          child: Row(children: <Widget>[
+            NavigationRail(
+              backgroundColor: const Color(0xff1f2225),
+              selectedLabelTextStyle: const TextStyle(color: Color(0xffffffff)),
+              selectedIconTheme: const IconThemeData(color: Color(0xffffffff)),
+              unselectedLabelTextStyle:
+                  const TextStyle(color: Color(0xff808183)),
+              unselectedIconTheme:
+                  const IconThemeData(color: Color(0xff808183)),
+              selectedIndex: _selectedIndex,
+              onDestinationSelected: (int index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+              labelType: NavigationRailLabelType.selected,
+              destinations: const <NavigationRailDestination>[
+                NavigationRailDestination(
+                  icon: Icon(Icons.chat_bubble_outline),
+                  selectedIcon: Icon(Icons.chat_bubble),
+                  label: Text('Chat'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.library_books_outlined),
+                  selectedIcon: Icon(Icons.library_books),
+                  label: Text('Docs'),
+                ),
+              ],
+            ),
+            const VerticalDivider(
+                thickness: 1, width: 1, color: Color(0xff474747)),
+            Expanded(
+                child: Chat(
+              messages: _messages,
+              onSendPressed: _handleSendPressed,
+              user: _user,
+              bubbleBuilder: _bubbleBuilder,
+              onEndReached: _handleEndReached,
+              showTyping: _showTyping,
+              showUserAvatars: true,
+              showUserNames: true,
+              theme: const DarkChatTheme(
+                  backgroundColor: Color(0xff141414),
+                  receivedMessageBodyTextStyle: TextStyle(
+                      color: neutral7,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w300,
+                      height: 1.5),
+                  sentMessageBodyTextStyle: TextStyle(
+                      color: neutral7,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w300,
+                      height: 1.5),
+                  inputTextStyle: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w300,
+                    height: 1.5,
+                  ),
+                  inputBackgroundColor: Color(0xff2d2d2d),
+                  inputMargin: EdgeInsets.all(10),
+                  inputBorderRadius: BorderRadius.all(Radius.circular(25))),
+            ))
+          ])),
     );
   }
 }
