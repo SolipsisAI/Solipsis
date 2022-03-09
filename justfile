@@ -6,7 +6,10 @@ llvm_path := if os() == "macos" {
     ""
 }
 
-default: gen lint
+default: install gen lint
+
+install:
+    flutter pub get
 
 gen:
     flutter_rust_bridge_codegen {{llvm_path}} \
