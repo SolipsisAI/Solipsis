@@ -72,9 +72,32 @@ Future<String> getModelDirPath(String modelName) async {
   return '$appdirpath/cortex/models/$modelName';
 }
 
-Future<bool> modelDirExists(String modelName) async {
+Future<bool> verifyModelFilesDownloaded(String modelName) async {
+  final resource = resources[modelName];
+
+  // TODO: This is not correct
+  if (resource == null) {
+    return false;
+  }
+
+  var isDownloaded = true;
+
   final modelDirPath = await getModelDirPath(modelName);
-  return Directory(modelDirPath).exists();
+  final modelDir = Directory(modelDirPath);
+
+  if (modelDir.existsSync() == false) {
+    return false;
+  }
+
+  for (var v in resource.values) {
+    var file = File("$modelDirPath/${v['filename']}");
+    if (file.existsSync() == false) {
+      isDownloaded = false;
+      break;
+    }
+  }
+
+  return isDownloaded;
 }
 
 void downloadModelFiles(String modelName) async {

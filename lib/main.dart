@@ -10,10 +10,13 @@ import 'utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Isar
   final dir = await getApplicationSupportDirectory();
   final Isar _isar = await Isar.open(
       schemas: [ChatMessageSchema, ChatUserSchema], directory: dir.path);
   final chatMessages = await _isar.chatMessages.where().findAll();
+
   runApp(SolipsisChat(isar: _isar, chatMessages: chatMessages));
 }
 
