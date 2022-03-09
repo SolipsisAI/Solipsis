@@ -107,6 +107,9 @@ class ConversationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: SolipsisChatHome(
-            modelDir: modelDir, isar: isar, chatMessages: chatMessages));
+            value: value,
+            modelDir: modelDir,
+            isar: isar,
+            chatMessages: chatMessages));
   }
 }

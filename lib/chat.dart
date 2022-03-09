@@ -15,10 +15,13 @@ import 'utils.dart';
 class SolipsisChatHome extends StatefulWidget {
   const SolipsisChatHome(
       {Key? key,
+      this.value,
       required this.modelDir,
       required this.isar,
       required this.chatMessages})
       : super(key: key);
+
+  final types.User? value;
 
   final Directory modelDir;
   final Isar isar;
@@ -153,9 +156,12 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
 
   @override
   Widget build(BuildContext context) {
+    String userName = widget.value != null && widget.value!.firstName != null
+        ? "${widget.value!.firstName}"
+        : "";
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Eliza"), backgroundColor: const Color(0xff212429)),
+          title: Text(userName), backgroundColor: const Color(0xff212429)),
       endDrawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the drawer if there isn't enough vertical
