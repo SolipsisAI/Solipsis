@@ -33,6 +33,7 @@ class _HomePageState extends State<HomePage> {
       body: ValueListenableBuilder(
         builder: (context, _, child) {
           return TwoColumns(
+            paneProportion: 30,
             showPane2: (_selected.value != null) ? true : false,
             onClosePane2Popup: _clearSelected,
             pane1: Pane1(items: items, selectValue: _selectValue),
