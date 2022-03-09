@@ -171,6 +171,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
           theme: const DarkChatTheme(
               backgroundColor: Color(0xff171717),
               inputBackgroundColor: Color(0xff2d2d2d),
+              inputMargin: EdgeInsets.all(10),
               inputBorderRadius: BorderRadius.all(Radius.circular(25))),
         ),
       ),
