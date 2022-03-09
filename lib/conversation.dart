@@ -45,7 +45,12 @@ class _ConversationHomeState extends State<ConversationHome> {
             showPane2: (_selected.value != null) ? true : false,
             onClosePane2Popup: _clearSelected,
             pane1: ConversationList(items: items, selectValue: _selectValue),
-            pane2: ConversationView(value: _selected.value),
+            pane2: ConversationView(
+              value: _selected.value,
+              modelDir: widget.modelDir,
+              isar: widget.isar,
+              chatMessages: widget.chatMessages,
+            ),
           );
         },
         valueListenable: _selected,
@@ -85,39 +90,23 @@ class ConversationList extends StatelessWidget {
 }
 
 class ConversationView extends StatelessWidget {
-  final types.User? value;
+  const ConversationView(
+      {Key? key,
+      this.value,
+      required this.modelDir,
+      required this.isar,
+      required this.chatMessages})
+      : super(key: key);
 
-  const ConversationView({Key? key, this.value}) : super(key: key);
+  final types.User? value;
+  final Directory modelDir;
+  final Isar isar;
+  final List<ChatMessage> chatMessages;
+
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 48.0),
-        child: Padding(
-            padding: const EdgeInsets.all(48),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Item card',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline5!
-                      .copyWith(color: Colors.blue[300]),
-                ),
-                SizedBox(height: 48),
-                (value != null)
-                    ? Text('User ${value!.id}')
-                    : Text(
-                        'No Selected value .',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2!
-                            .copyWith(color: Colors.red[300]),
-                      ),
-              ],
-            )),
-      ),
-    );
+        child: SolipsisChatHome(
+            modelDir: modelDir, isar: isar, chatMessages: chatMessages));
   }
 }
