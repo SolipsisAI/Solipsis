@@ -170,6 +170,21 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
           showUserNames: true,
           theme: const DarkChatTheme(
               backgroundColor: Color(0xff171717),
+              receivedMessageBodyTextStyle: TextStyle(
+                  color: neutral7,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  height: 1.5),
+              sentMessageBodyTextStyle: TextStyle(
+                  color: neutral7,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  height: 1.5),
+              inputTextStyle: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                height: 1.5,
+              ),
               inputBackgroundColor: Color(0xff2d2d2d),
               inputMargin: EdgeInsets.all(10),
               inputBorderRadius: BorderRadius.all(Radius.circular(25))),
