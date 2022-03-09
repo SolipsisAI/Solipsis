@@ -140,8 +140,8 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
       child: child,
       color: _user.id != message.author.id ||
               message.type == types.MessageType.image
-          ? const Color(0xfff5f5f7)
-          : const Color(0xff6f61e8),
+          ? const Color(0xff2a2a2b)
+          : const Color(0xff147efb),
       margin: nextMessageInGroup
           ? const BubbleEdges.symmetric(horizontal: 6)
           : null,
@@ -167,6 +167,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
           showTyping: _showTyping,
           showUserAvatars: true,
           showUserNames: true,
+          theme: const DarkChatTheme(backgroundColor: Color(0xff171717)),
         ),
       ),
     );
