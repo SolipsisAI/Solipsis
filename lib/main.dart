@@ -50,7 +50,8 @@ class SolipsisChat extends StatelessWidget {
         },
         child: MaterialApp(
           title: 'SolipsisChat',
-          home: SolipsisChatHome(isar: isar, chatMessages: chatMessages),
+          home: SolipsisChatHome(
+              modelDir: modelDir, isar: isar, chatMessages: chatMessages),
         ));
   }
 }
