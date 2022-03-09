@@ -79,8 +79,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: const Text("Eliza"), backgroundColor: const Color(0xff8e8e93)),
       body: Row(
         children: <Widget>[
           NavigationRail(

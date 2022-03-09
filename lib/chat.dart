@@ -157,6 +157,8 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          title: const Text("Eliza"), backgroundColor: const Color(0xff8e8e93)),
       body: SafeArea(
         bottom: false,
         child: Chat(
