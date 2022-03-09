@@ -137,6 +137,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
     required nextMessageInGroup,
   }) {
     return Bubble(
+      radius: const Radius.circular(15),
       child: child,
       color: _user.id != message.author.id ||
               message.type == types.MessageType.image
