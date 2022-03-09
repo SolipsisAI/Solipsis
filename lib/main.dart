@@ -59,7 +59,7 @@ class Pane1 extends StatelessWidget {
           ...items.map(
             (e) => Card(
               child: ListTile(
-                title: Text(e.id),
+                title: Text("${e.firstName} ${e.lastName}"),
                 onTap: () => selectValue(e),
               ),
             ),
@@ -93,7 +93,7 @@ class Pane2 extends StatelessWidget {
                 ),
                 SizedBox(height: 48),
                 (value != null)
-                    ? Text('Selected value is ${value!.id}')
+                    ? Text('User ${value!.id}')
                     : Text(
                         'No Selected value .',
                         style: Theme.of(context)
