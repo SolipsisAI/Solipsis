@@ -159,9 +159,6 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Select List Items'),
-        ),
         body: ListView.builder(
           itemCount: 10,
           itemBuilder: (context, index) {
