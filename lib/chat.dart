@@ -158,7 +158,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Eliza"), backgroundColor: const Color(0xff8e8e93)),
+          title: const Text("Eliza"), backgroundColor: const Color(0xff212429)),
       body: SafeArea(
         bottom: false,
         child: Chat(
@@ -171,7 +171,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
           showUserAvatars: true,
           showUserNames: true,
           theme: const DarkChatTheme(
-              backgroundColor: Color(0xff171717),
+              backgroundColor: Color(0xff141414),
               receivedMessageBodyTextStyle: TextStyle(
                   color: neutral7,
                   fontSize: 13,
