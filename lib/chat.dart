@@ -154,7 +154,8 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Eliza")),
+      appBar: AppBar(
+          title: const Text("Eliza"), backgroundColor: const Color(0xff212429)),
       endDrawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the drawer if there isn't enough vertical
