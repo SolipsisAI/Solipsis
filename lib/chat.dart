@@ -32,6 +32,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   bool _showTyping = false;
   int _page = 0;
 
+  List<int> _selectedItems = [];
   List<types.Message> _messages = [];
 
   final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
@@ -156,75 +157,37 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: const Text("Eliza"), backgroundColor: const Color(0xff212429)),
-      endDrawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('Drawer Header'),
-            ),
-            ListTile(
-              title: const Text('Item 1'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Item 2'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-          ],
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Select List Items'),
         ),
-      ),
-      body: SafeArea(
-        bottom: false,
-        child: Chat(
-          messages: _messages,
-          onSendPressed: _handleSendPressed,
-          user: _user,
-          bubbleBuilder: _bubbleBuilder,
-          onEndReached: _handleEndReached,
-          showTyping: _showTyping,
-          showUserAvatars: true,
-          showUserNames: true,
-          theme: const DarkChatTheme(
-              backgroundColor: Color(0xff141414),
-              receivedMessageBodyTextStyle: TextStyle(
-                  color: neutral7,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w300,
-                  height: 1.5),
-              sentMessageBodyTextStyle: TextStyle(
-                  color: neutral7,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w300,
-                  height: 1.5),
-              inputTextStyle: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w300,
-                height: 1.5,
+        body: ListView.builder(
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return Container(
+              color: (_selectedItems.contains(index))
+                  ? Colors.blue.withOpacity(0.5)
+                  : Colors.transparent,
+              child: ListTile(
+                onTap: () {
+                  if (_selectedItems.contains(index)) {
+                    setState(() {
+                      _selectedItems.removeWhere((val) => val == index);
+                    });
+                  }
+                },
+                onLongPress: () {
+                  if (!_selectedItems.contains(index)) {
+                    setState(() {
+                      _selectedItems.add(index);
+                    });
+                  }
+                },
+                title: Text('$index'),
               ),
-              inputBackgroundColor: Color(0xff2d2d2d),
-              inputMargin: EdgeInsets.all(10),
-              inputBorderRadius: BorderRadius.all(Radius.circular(25))),
+            );
+          },
         ),
       ),
     );
