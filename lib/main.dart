@@ -79,9 +79,16 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          title: const Text("Eliza"), backgroundColor: const Color(0xff8e8e93)),
       body: Row(
         children: <Widget>[
           NavigationRail(
+            backgroundColor: const Color(0xff1f2225),
+            selectedLabelTextStyle: const TextStyle(color: Color(0xffffffff)),
+            selectedIconTheme: const IconThemeData(color: Color(0xffffffff)),
+            unselectedLabelTextStyle: const TextStyle(color: Color(0xff808183)),
+            unselectedIconTheme: const IconThemeData(color: Color(0xff808183)),
             selectedIndex: _selectedIndex,
             onDestinationSelected: (int index) {
               setState(() {
@@ -91,19 +98,14 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             labelType: NavigationRailLabelType.selected,
             destinations: const <NavigationRailDestination>[
               NavigationRailDestination(
-                icon: Icon(Icons.favorite_border),
-                selectedIcon: Icon(Icons.favorite),
-                label: Text('First'),
+                icon: Icon(Icons.chat_bubble_outline),
+                selectedIcon: Icon(Icons.chat_bubble),
+                label: Text('Chat'),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.bookmark_border),
-                selectedIcon: Icon(Icons.book),
-                label: Text('Second'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.star_border),
-                selectedIcon: Icon(Icons.star),
-                label: Text('Third'),
+                icon: Icon(Icons.library_books_outlined),
+                selectedIcon: Icon(Icons.library_books),
+                label: Text('Docs'),
               ),
             ],
           ),
