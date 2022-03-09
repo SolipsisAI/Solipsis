@@ -6,6 +6,8 @@ import 'chat.dart';
 import 'models/chat_message.dart';
 import 'models/chat_user.dart';
 
+import 'utils.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final dir = await getApplicationSupportDirectory();

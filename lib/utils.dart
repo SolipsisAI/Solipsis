@@ -72,6 +72,11 @@ Future<String> getModelDirPath(String modelName) async {
   return '$appdirpath/cortex/models/$modelName';
 }
 
+Future<bool> modelDirExists(String modelName) async {
+  final modelDirPath = await getModelDirPath(modelName);
+  return Directory(modelDirPath).exists();
+}
+
 void downloadModelFiles(String modelName) async {
   String appdirpath = (await getApplicationSupportDirectory()).path;
 
