@@ -41,15 +41,33 @@ class ElizaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: _title,
-      home: MyStatefulWidget(),
-    );
+    return GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: MaterialApp(
+          title: _title,
+          home: MyStatefulWidget(
+              modelDir: modelDir, isar: isar, chatMessages: chatMessages),
+        ));
   }
 }
 
 class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({Key? key}) : super(key: key);
+  const MyStatefulWidget(
+      {Key? key,
+      required this.modelDir,
+      required this.isar,
+      required this.chatMessages})
+      : super(key: key);
+
+  final Directory modelDir;
+  final Isar isar;
+  final List<ChatMessage> chatMessages;
 
   @override
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
