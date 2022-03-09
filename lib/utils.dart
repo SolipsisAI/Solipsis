@@ -38,6 +38,32 @@ const resources = {
       'filename': 'vocab.json',
       'type': 'string'
     }
+  },
+  'dialogpt-medium': {
+    'model': {
+      'url':
+          'https://huggingface.co/microsoft/DialoGPT-medium/resolve/main/rust_model.ot',
+      'filename': 'rust_model.ot',
+      'type': 'bytes',
+    },
+    'merges': {
+      'url':
+          'https://huggingface.co/microsoft/DialoGPT-medium/resolve/main/merges.txt',
+      'filename': 'merges.txt',
+      'type': 'string',
+    },
+    'vocab': {
+      'url':
+          'https://huggingface.co/microsoft/DialoGPT-medium/resolve/main/vocab.json',
+      'filename': 'vocab.json',
+      'type': 'string',
+    },
+    'config': {
+      'url':
+          'https://huggingface.co/microsoft/DialoGPT-medium/resolve/main/config.json',
+      'filename': 'config.json',
+      'type': 'string',
+    }
   }
 };
 
