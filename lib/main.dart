@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'two_columns.dart';
+import 'layouts/two_columns.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'utils.dart';
 
