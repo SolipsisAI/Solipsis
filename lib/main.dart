@@ -19,10 +19,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // demo content
-  List<int> items = [for (var i = 1; i < 10; i++) i];
-  ValueNotifier<int?> _selected = ValueNotifier(null);
+  List<types.User> items = [botUser];
+  ValueNotifier<types.User?> _selected = ValueNotifier(null);
 
-  void _selectValue(int? val) => _selected.value = val;
+  void _selectValue(types.User? val) => _selected.value = val;
   void _clearSelected() => _selected.value = null;
 
   @override
@@ -46,8 +46,8 @@ class _HomePageState extends State<HomePage> {
 }
 
 class Pane1 extends StatelessWidget {
-  final void Function(int?) selectValue;
-  final List<int> items;
+  final void Function(types.User?) selectValue;
+  final List<types.User> items;
   const Pane1({required this.selectValue, this.items = const []});
 
   @override
@@ -59,7 +59,7 @@ class Pane1 extends StatelessWidget {
           ...items.map(
             (e) => Card(
               child: ListTile(
-                title: Text('Item number $e'),
+                title: Text(e.id),
                 onTap: () => selectValue(e),
               ),
             ),
@@ -71,7 +71,7 @@ class Pane1 extends StatelessWidget {
 }
 
 class Pane2 extends StatelessWidget {
-  final int? value;
+  final types.User? value;
 
   const Pane2({Key? key, this.value}) : super(key: key);
   @override
@@ -93,7 +93,7 @@ class Pane2 extends StatelessWidget {
                 ),
                 SizedBox(height: 48),
                 (value != null)
-                    ? Text('Selected value is $value')
+                    ? Text('Selected value is ${value!.id}')
                     : Text(
                         'No Selected value .',
                         style: Theme.of(context)
