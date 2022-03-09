@@ -11,16 +11,34 @@ import 'package:path_provider/path_provider.dart';
 const String loremIpsumApiUrl =
     'https://litipsum.com/api/dr-jekyll-and-mr-hyde/1/json';
 const int wordsPerMinute = 100;
-const modelUrl =
-    "https://huggingface.co/dbmdz/bert-large-cased-finetuned-conll03-english/resolve/main/rust_model.ot";
-const configUrl =
-    "https://huggingface.co/bert-large-cased-whole-word-masking-finetuned-squad/resolve/main/config.json";
-const vocabUrl =
-    "https://huggingface.co/bert-large-cased-whole-word-masking-finetuned-squad/resolve/main/vocab.txt";
+
 const downloads = [
-  {'url': modelUrl, 'filename': 'rust_model.ot'},
-  {'url': configUrl, 'filename': 'config.json'},
-  {'url': vocabUrl, 'filename': 'vocab.txt'}
+  {
+    'model': {
+      'url':
+          'https://huggingface.co/sshleifer/distilbart-cnn-12-6/resolve/main/rust_model.ot',
+      'filename': 'rust_model.ot',
+      'type': 'bytes',
+    },
+    'config': {
+      'url':
+          'https://cdn.huggingface.co/sshleifer/distilbart-cnn-12-6/config.json',
+      'filename': 'config.json',
+      'type': 'string',
+    },
+    'merges': {
+      'url':
+          'https://cdn.huggingface.co/sshleifer/distilbart-cnn-12-6/merges.txt',
+      'filename': 'merges.txt',
+      'type': 'string',
+    },
+    'vocab': {
+      'url':
+          'https://cdn.huggingface.co/sshleifer/distilbart-cnn-12-6/vocab.json',
+      'filename': 'vocab.json',
+      'type': 'string'
+    }
+  }
 ];
 
 Future<String> getModelDirPath(String modelName) async {
@@ -35,25 +53,33 @@ void downloadModelFiles() async {
       .create(recursive: true);
   for (var i = 0; i < downloads.length; i++) {
     var download = downloads[i];
-    logger.log("[DOWNLOAD] ${download['url']}");
-    downloadFile(download['url'], download['filename'], downloaddir.path);
+    for (var v in download.values) {
+      downloadFile(v['url'], v['filename'], v['type'], downloaddir.path);
+    }
   }
 }
 
-void downloadFile(String? url, String? filename, String? downloaddir) async {
+void downloadFile(
+    String? url, String? filename, String? type, String? downloaddir) async {
   String filepath = '$downloaddir/$filename';
 
+  logger.log('[DOWNLOAD] $url -> $filepath');
+
   if (File(filepath).existsSync()) {
+    logger.log('[SKIP] Exists');
     return;
   }
 
   final client = http.Client();
   final response = await client.get(Uri.parse(url!));
-  final bytes = response.bodyBytes;
 
   File file = File(filepath);
 
-  await file.writeAsBytes(bytes);
+  if (type == 'bytes') {
+    await file.writeAsBytes(response.bodyBytes);
+  } else {
+    await file.writeAsString(response.body);
+  }
 
   logger.log("[SUCCESS] Downloaded $filepath");
 }
