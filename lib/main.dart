@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
             paneProportion: 30,
             showPane2: (_selected.value != null) ? true : false,
             onClosePane2Popup: _clearSelected,
-            pane1: Pane1(items: items, selectValue: _selectValue),
+            pane1: UserList(items: items, selectValue: _selectValue),
             pane2: Pane2(value: _selected.value),
           );
         },
@@ -46,10 +46,10 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class Pane1 extends StatelessWidget {
+class UserList extends StatelessWidget {
   final void Function(types.User?) selectValue;
   final List<types.User> items;
-  const Pane1({required this.selectValue, this.items = const []});
+  const UserList({required this.selectValue, this.items = const []});
 
   @override
   Widget build(BuildContext context) {
