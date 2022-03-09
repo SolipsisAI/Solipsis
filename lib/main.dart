@@ -110,9 +110,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           const VerticalDivider(thickness: 1, width: 1),
           // This is the main content.
           Expanded(
-            child: Center(
-              child: Text('selectedIndex: $_selectedIndex'),
-            ),
+            child: SolipsisChatHome(
+                modelDir: widget.modelDir,
+                isar: widget.isar,
+                chatMessages: widget.chatMessages),
           )
         ],
       ),
