@@ -36,8 +36,8 @@ class _HomePageState extends State<HomePage> {
             paneProportion: 30,
             showPane2: (_selected.value != null) ? true : false,
             onClosePane2Popup: _clearSelected,
-            pane1: UserList(items: items, selectValue: _selectValue),
-            pane2: Pane2(value: _selected.value),
+            pane1: ConversationList(items: items, selectValue: _selectValue),
+            pane2: ConversationView(value: _selected.value),
           );
         },
         valueListenable: _selected,
@@ -46,10 +46,10 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class UserList extends StatelessWidget {
+class ConversationList extends StatelessWidget {
   final void Function(types.User?) selectValue;
   final List<types.User> items;
-  const UserList({required this.selectValue, this.items = const []});
+  const ConversationList({required this.selectValue, this.items = const []});
 
   @override
   Widget build(BuildContext context) {
@@ -71,10 +71,10 @@ class UserList extends StatelessWidget {
   }
 }
 
-class Pane2 extends StatelessWidget {
+class ConversationView extends StatelessWidget {
   final types.User? value;
 
-  const Pane2({Key? key, this.value}) : super(key: key);
+  const ConversationView({Key? key, this.value}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Center(
