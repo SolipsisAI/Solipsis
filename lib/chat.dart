@@ -35,9 +35,6 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   List<int> _selectedItems = [];
   List<types.Message> _messages = [];
 
-  final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
-  final _bot = const types.User(id: '09778d0f-fb94-4ac6-8d72-96112805f3ad');
-
   @override
   void initState() {
     super.initState();
@@ -65,7 +62,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
     final messages = data
         .map(
           (e) => types.TextMessage(
-            author: _user,
+            author: myUser,
             id: '$e["id"]',
             text: e['name'] as String,
           ),
@@ -92,7 +89,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
     final responseText = await api.chat(modelDirPath: modelDirPath, text: text);
 
     final message = types.TextMessage(
-        author: _bot,
+        author: botUser,
         createdAt: currentTimestamp(),
         id: randomString(),
         text: responseText);
@@ -122,7 +119,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
 
   void _handleSendPressed(types.PartialText message) {
     final textMessage = types.TextMessage(
-      author: _user,
+      author: myUser,
       createdAt: currentTimestamp(),
       id: randomString(),
       text: message.text,
@@ -140,7 +137,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
     return Bubble(
       radius: const Radius.circular(15),
       child: child,
-      color: _user.id != message.author.id ||
+      color: myUser.id != message.author.id ||
               message.type == types.MessageType.image
           ? const Color(0xff2a2a2b)
           : const Color(0xff147efb),
@@ -149,7 +146,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
           : null,
       nip: nextMessageInGroup
           ? BubbleNip.no
-          : _user.id != message.author.id
+          : myUser.id != message.author.id
               ? BubbleNip.leftBottom
               : BubbleNip.rightBottom,
     );

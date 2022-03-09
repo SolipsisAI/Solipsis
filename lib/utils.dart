@@ -8,6 +8,15 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
+const myUser = types.User(
+    id: '06c33e8b-e835-4736-80f4-63f44b66666c',
+    firstName: 'Al',
+    lastName: 'Julian');
+const botUser = types.User(
+    id: '09778d0f-fb94-4ac6-8d72-96112805f3ad',
+    firstName: 'Eliza',
+    lastName: '');
+
 const String loremIpsumApiUrl =
     'https://litipsum.com/api/dr-jekyll-and-mr-hyde/1/json';
 const int wordsPerMinute = 100;
