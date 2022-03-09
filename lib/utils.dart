@@ -100,7 +100,7 @@ Future<bool> verifyModelFilesDownloaded(String modelName) async {
   return isDownloaded;
 }
 
-void downloadModelFiles(String modelName) async {
+Future<Directory> downloadModelFiles(String modelName) async {
   String appdirpath = (await getApplicationSupportDirectory()).path;
 
   logger.log('[APPDIR] $appdirpath');
@@ -117,6 +117,8 @@ void downloadModelFiles(String modelName) async {
   } else {
     logger.log("[FAIL] Resource $modelName does not exist");
   }
+
+  return downloaddir;
 }
 
 void downloadFile(
