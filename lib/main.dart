@@ -111,7 +111,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               thickness: 1, width: 1, color: Color(0xff474747)),
           // This is the main content.
           Expanded(
-            child: ConversationHome(),
+            child: ConversationHome(
+              modelDir: widget.modelDir,
+              isar: widget.isar,
+              chatMessages: widget.chatMessages,
+            ),
           )
         ],
       ),

@@ -12,12 +12,22 @@ import 'utils.dart';
 import 'layouts/two_columns.dart';
 
 class ConversationHome extends StatefulWidget {
+  const ConversationHome(
+      {Key? key,
+      required this.modelDir,
+      required this.isar,
+      required this.chatMessages})
+      : super(key: key);
+
+  final Directory modelDir;
+  final Isar isar;
+  final List<ChatMessage> chatMessages;
+
   @override
   _ConversationHomeState createState() => _ConversationHomeState();
 }
 
 class _ConversationHomeState extends State<ConversationHome> {
-  // demo content
   List<types.User> items = [botUser];
   ValueNotifier<types.User?> _selected = ValueNotifier(null);
 
@@ -28,7 +38,6 @@ class _ConversationHomeState extends State<ConversationHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey[300],
-      appBar: AppBar(title: Text('Home page')),
       body: ValueListenableBuilder(
         builder: (context, _, child) {
           return TwoColumns(
@@ -46,9 +55,14 @@ class _ConversationHomeState extends State<ConversationHome> {
 }
 
 class ConversationList extends StatelessWidget {
+  const ConversationList({
+    Key? key,
+    required this.selectValue,
+    required this.items,
+  }) : super(key: key);
+
   final void Function(types.User?) selectValue;
   final List<types.User> items;
-  const ConversationList({required this.selectValue, this.items = const []});
 
   @override
   Widget build(BuildContext context) {
