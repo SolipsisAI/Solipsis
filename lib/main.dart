@@ -109,7 +109,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               ),
             ],
           ),
-          const VerticalDivider(thickness: 1, width: 1),
+          const VerticalDivider(
+              thickness: 1, width: 1, color: Color(0xff474747)),
           // This is the main content.
           Expanded(
             child: SolipsisChatHome(
