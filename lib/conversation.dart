@@ -28,7 +28,7 @@ class ConversationHome extends StatefulWidget {
 }
 
 class _ConversationHomeState extends State<ConversationHome> {
-  List<types.User> items = [botUser, dummyUser];
+  List<types.User> items = [botUser, dummyUser, anotherUser];
   ValueNotifier<types.User?> _selected = ValueNotifier(null);
 
   void _selectValue(types.User? val) => _selected.value = val;
@@ -82,7 +82,7 @@ class ConversationList extends StatelessWidget {
         children: [
           ...items.map(
             (e) => Card(
-              color: e.id == value!.id
+              color: (value != null && e.id == value!.id)
                   ? const Color(0xff3a3a3a)
                   : const Color(0xff232323),
               child: ListTile(
