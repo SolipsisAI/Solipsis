@@ -27,11 +27,50 @@ class SolipsisChatHome extends StatefulWidget {
 class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   bool _showTyping = false;
   // int _page = 0;
-  final List<types.TextMessage> _messages = [];
+  List<types.TextMessage> _messages = [];
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant SolipsisChatHome oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    loadMessages();
+  }
+
+  Future<List<ChatMessage>> getChatMessages() async {
+    if (widget.recipient == null) {
+      return [];
+    }
+
+    final results = await widget.isar.chatMessages
+        .filter()
+        .recipientUuidEqualTo(widget.recipient!.id)
+        .findAll();
+
+    return results;
+  }
+
+  void loadMessages() async {
+    if (widget.recipient == null) return;
+
+    _messages = [];
+
+    final chatMessages = await getChatMessages();
+
+    for (var chatMessage in chatMessages) {
+      logger.log("[MESSAGES] Adding $chatMessage");
+      _messages.insert(
+          0,
+          types.TextMessage(
+              author: getUserByUuid(chatMessage.authorUuid),
+              id: chatMessage.uuid,
+              text: chatMessage.text,
+              createdAt: chatMessage.createdAt));
+    }
+    logger.log("[MESSAGES] Added message");
   }
 
   Future<void> _handleEndReached() async {
