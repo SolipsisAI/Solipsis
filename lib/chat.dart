@@ -26,7 +26,7 @@ class SolipsisChatHome extends StatefulWidget {
 
 class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   bool _showTyping = false;
-  // int _page = 0;
+  int _page = 0;
   final List<types.TextMessage> _messages = [];
 
   @override
@@ -34,12 +34,6 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
     super.initState();
     loadMessages();
   }
-
-  // @override
-  // void didUpdateWidget(covariant SolipsisChatHome oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //   loadMessages();
-  // }
 
   Future<List<ChatMessage>> getChatMessages() async {
     if (widget.recipient == null) {
