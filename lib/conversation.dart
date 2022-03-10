@@ -102,7 +102,15 @@ class ConversationView extends StatelessWidget {
   final Isar isar;
 
   Stream<List<ChatMessage>> execQuery() {
-    return isar.chatMessages.where().build().watch(initialReturn: true);
+    if (recipient == null) {
+      return isar.chatMessages.where().build().watch(initialReturn: true);
+    }
+
+    return isar.chatMessages
+        .filter()
+        .recipientUuidEqualTo(recipient!.id)
+        .build()
+        .watch();
   }
 
   @override
