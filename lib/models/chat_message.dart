@@ -10,5 +10,6 @@ class ChatMessage {
   late int createdAt;
   late String text;
   late String uuid;
-  late String userUuid;
+  late String authorUuid;
+  late String recipientUuid;
 }
