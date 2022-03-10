@@ -72,12 +72,14 @@ class ConversationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: const Color(0xff232323),
       child: ListView(
         children: [
           ...items.map(
             (e) => Card(
+              color: const Color(0xff3a3a3a),
               child: ListTile(
+                textColor: Colors.white,
                 title: Text("${e.firstName} ${e.lastName}"),
                 onTap: () => selectValue(e),
               ),
