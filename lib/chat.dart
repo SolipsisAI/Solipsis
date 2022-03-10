@@ -56,6 +56,12 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   void loadMessages() async {
     if (widget.recipient == null) return;
 
+    if (_messages.isNotEmpty &&
+        _messages.last.author.id == widget.recipient!.id) {
+      return;
+    }
+
+    // clear if the messages list isn't empty
     _messages = [];
 
     final chatMessages = await getChatMessages();
