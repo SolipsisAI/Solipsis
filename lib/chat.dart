@@ -100,6 +100,10 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   }
 
   Future<void> _handleBotResponse(String text) async {
+    if (widget.recipient == null) {
+      return;
+    }
+
     final filesWereDownloaded =
         await verifyModelFilesDownloaded("dialogpt-medium");
 
@@ -108,13 +112,11 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
       return;
     }
 
-    _showTyping = true;
     final modelDirPath = widget.modelDir.path;
-    final responseText = await api.chat(modelDirPath: modelDirPath, text: text);
 
-    if (widget.recipient == null) {
-      return;
-    }
+    _showTyping = true;
+
+    final responseText = await api.chat(modelDirPath: modelDirPath, text: text);
 
     final message = types.TextMessage(
         author: widget.recipient!,
@@ -122,8 +124,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
         id: randomString(),
         text: responseText);
 
-    await Future.delayed(
-        Duration(seconds: messageDelay(message)), () => _showTyping = false);
+    _showTyping = false;
 
     _addMessage(message, true);
   }
