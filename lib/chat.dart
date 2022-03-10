@@ -57,7 +57,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
     return results;
   }
 
-  void loadMessages() async {
+  Future<void> loadMessages() async {
     if (widget.recipient == null) return;
 
     if (_messages.isNotEmpty &&
@@ -65,22 +65,17 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
       return;
     }
 
-    // clear if the messages list isn't empty
-    _messages = [];
-
     final chatMessages = await getChatMessages();
 
-    for (var chatMessage in chatMessages) {
-      logger.log("[MESSAGES] Adding $chatMessage");
-      _messages.insert(
-          0,
-          types.TextMessage(
-              author: getUserByUuid(chatMessage.authorUuid),
-              id: chatMessage.uuid,
-              text: chatMessage.text,
-              createdAt: chatMessage.createdAt));
+    final results = chatMessages.map((e) => convertMessage(e));
+
+    for (var message in results) {
+      setState(() {
+        _addMessage(message, false);
+      });
     }
-    logger.log("[MESSAGES] Added message");
+
+    logger.log("[MESSAGES] Added message ${results.length}");
   }
 
   Future<void> _handleEndReached() async {
