@@ -34,11 +34,11 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
     super.initState();
   }
 
-  @override
-  void didUpdateWidget(covariant SolipsisChatHome oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    loadMessages();
-  }
+  // @override
+  // void didUpdateWidget(covariant SolipsisChatHome oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   loadMessages();
+  // }
 
   Future<List<ChatMessage>> getChatMessages() async {
     if (widget.recipient == null) {

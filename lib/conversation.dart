@@ -102,7 +102,12 @@ class ConversationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: SolipsisChatHome(
-            isar: isar, modelDir: modelDir, recipient: recipient));
+        child: recipient == null
+            ? const Text("Click on a person")
+            : SolipsisChatHome(
+                key: ValueKey(recipient!.id),
+                isar: isar,
+                modelDir: modelDir,
+                recipient: recipient));
   }
 }
