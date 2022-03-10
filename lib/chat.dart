@@ -35,33 +35,11 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   @override
   void initState() {
     super.initState();
-    // for (var message in _messages) {
-    //   setState(() {
-    //     _messages.insert(
-    //         0,
-    //         types.TextMessage(
-    //             author: types.User(id: widget.chatMessages[i].userUuid),
-    //             id: widget.chatMessages[i].uuid,
-    //             createdAt: widget.chatMessages[i].createdAt,
-    //             text: widget.chatMessages[i].text));
-    //   });
-    // }
     logger.log("[Loading] Trying to get messages");
-    getMessages().then((results) => {
-          for (var result in results)
-            {
-              _addMessage(
-                  types.TextMessage(
-                      author: types.User(id: result.authorUuid),
-                      id: result.uuid,
-                      createdAt: result.createdAt,
-                      text: result.text),
-                  false)
-            }
-        });
+    loadMessages();
   }
 
-  Future<List<ChatMessage>> getMessages() async {
+  Future<List<ChatMessage>> getChatMessages() async {
     if (widget.recipient == null) {
       return [];
     }
@@ -70,7 +48,26 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
         .filter()
         .recipientUuidEqualTo(widget.recipient!.id)
         .findAll();
+
     return results;
+  }
+
+  void loadMessages() async {
+    if (widget.recipient == null) return;
+
+    final chatMessages = await getChatMessages();
+
+    for (var chatMessage in chatMessages) {
+      logger.log("[MESSAGES] Adding $chatMessage");
+      _messages.insert(
+          0,
+          types.TextMessage(
+              author: getUserByUuid(chatMessage.authorUuid),
+              id: chatMessage.uuid,
+              text: chatMessage.text,
+              createdAt: chatMessage.createdAt));
+    }
+    logger.log("[MESSAGES] Added message");
   }
 
   Future<void> _handleEndReached() async {

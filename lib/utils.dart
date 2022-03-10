@@ -25,6 +25,13 @@ const anotherUser = types.User(
     firstName: 'Alan',
     lastName: 'Turing');
 
+const userMapping = {
+  '06c33e8b-e835-4736-80f4-63f44b66666c': myUser,
+  '09778d0f-fb94-4ac6-8d72-96112805f3ad': botUser,
+  '6b340874-fd30-485e-b0ca-e04fb4030309': dummyUser,
+  '11f76d90-c6d8-4e37-a3d2-48948e85ef36': anotherUser
+};
+
 const String loremIpsumApiUrl =
     'https://litipsum.com/api/dr-jekyll-and-mr-hyde/1/json';
 const int wordsPerMinute = 100;
@@ -83,6 +90,11 @@ const resources = {
     }
   }
 };
+
+types.User getUserByUuid(String uuid) {
+// https://stackoverflow.com/questions/51141109/null-aware-operator-with-maps
+  return userMapping[uuid] ?? types.User(id: randomString());
+}
 
 Future<String> getModelDirPath(String modelName) async {
   String appdirpath = (await getApplicationSupportDirectory()).path;
