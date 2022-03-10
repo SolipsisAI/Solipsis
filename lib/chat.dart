@@ -35,14 +35,6 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   @override
   void initState() {
     super.initState();
-    logger.log("[Loading] Trying to get messages");
-    loadMessages();
-  }
-
-  @override
-  void didUpdateWidget(covariant SolipsisChatHome oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    loadMessages();
   }
 
   Future<List<ChatMessage>> getChatMessages() async {

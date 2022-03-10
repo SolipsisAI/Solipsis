@@ -101,10 +101,31 @@ class ConversationView extends StatelessWidget {
   final Directory modelDir;
   final Isar isar;
 
+  Stream<List<ChatMessage>> execQuery() {
+    return isar.chatMessages.where().build().watch(initialReturn: true);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: SolipsisChatHome(
-            recipient: recipient, modelDir: modelDir, isar: isar));
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: SafeArea(
+          child: StreamBuilder(
+            stream: execQuery(),
+            builder: (context, AsyncSnapshot<List<ChatMessage>?> data) {
+              if (data.hasData) {
+                return SolipsisChatHome(
+                    recipient: recipient, modelDir: modelDir, isar: isar);
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
