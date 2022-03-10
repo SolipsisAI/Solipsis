@@ -3,6 +3,8 @@
 This repository serves as a template for Flutter projects calling into native Rust
 libraries via `flutter_rust_bridge`.
 
+<a href="https://www.flaticon.com/free-icons/chatbot" title="chatbot icons">Chatbot icons created by Flat Icons - Flaticon</a>
+
 ## Getting Started
 
 To begin, ensure that you have a working installation of the following items:
