@@ -48,7 +48,11 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
     final results = await widget.isar.chatMessages
         .filter()
         .recipientUuidEqualTo(widget.recipient!.id)
+        .sortByCreatedAtDesc()
+        .limit(10)
         .findAll();
+
+    results.sort(((a, b) => a.createdAt.compareTo(b.createdAt)));
 
     return results;
   }
