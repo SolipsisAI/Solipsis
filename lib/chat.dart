@@ -39,6 +39,12 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
     loadMessages();
   }
 
+  @override
+  void didUpdateWidget(covariant SolipsisChatHome oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    loadMessages();
+  }
+
   Future<List<ChatMessage>> getChatMessages() async {
     if (widget.recipient == null) {
       return [];
@@ -54,6 +60,8 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
 
   void loadMessages() async {
     if (widget.recipient == null) return;
+
+    _messages = [];
 
     final chatMessages = await getChatMessages();
 

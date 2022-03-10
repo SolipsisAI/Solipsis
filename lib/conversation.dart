@@ -82,7 +82,6 @@ class ConversationList extends StatelessWidget {
               child: ListTile(
                 textColor: Colors.white,
                 title: Text("${e.firstName} ${e.lastName}"),
-                subtitle: const Text("That's good"),
                 onTap: () => selectValue(e),
               ),
             ),
