@@ -70,10 +70,12 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
 
     final results = chatMessages.map((e) => convertMessage(e));
 
-    for (var message in results) {
-      setState(() {
-        _addMessage(message, false);
-      });
+    if (mounted) {
+      for (var message in results) {
+        setState(() {
+          _addMessage(message, false);
+        });
+      }
     }
 
     logger.log("[MESSAGES] Added message ${results.length}");
@@ -146,9 +148,11 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
       });
     }
 
-    setState(() {
-      _messages.insert(0, message);
-    });
+    if (mounted) {
+      setState(() {
+        _messages.insert(0, message);
+      });
+    }
   }
 
   void _handleSendPressed(types.PartialText message) {
