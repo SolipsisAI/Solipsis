@@ -40,11 +40,11 @@ class _ConversationHomeState extends State<ConversationHome> {
             showPane2: (_selected.value != null) ? true : false,
             onClosePane2Popup: _clearSelected,
             pane1: ConversationList(
-                value: _selected.value,
+                recipient: _selected.value,
                 items: items,
                 selectValue: _selectValue),
             pane2: ConversationView(
-              value: _selected.value,
+              recipient: _selected.value,
               modelDir: widget.modelDir,
               isar: widget.isar,
             ),
@@ -59,12 +59,12 @@ class _ConversationHomeState extends State<ConversationHome> {
 class ConversationList extends StatelessWidget {
   const ConversationList({
     Key? key,
-    this.value,
+    this.recipient,
     required this.selectValue,
     required this.items,
   }) : super(key: key);
 
-  final types.User? value;
+  final types.User? recipient;
   final void Function(types.User?) selectValue;
   final List<types.User> items;
 
@@ -76,7 +76,7 @@ class ConversationList extends StatelessWidget {
         children: [
           ...items.map(
             (e) => Card(
-              color: (value != null && e.id == value!.id)
+              color: (recipient != null && e.id == recipient!.id)
                   ? const Color(0xff3a3a3a)
                   : const Color(0xff232323),
               child: ListTile(
@@ -95,16 +95,17 @@ class ConversationList extends StatelessWidget {
 
 class ConversationView extends StatelessWidget {
   const ConversationView(
-      {Key? key, this.value, required this.modelDir, required this.isar})
+      {Key? key, this.recipient, required this.modelDir, required this.isar})
       : super(key: key);
 
-  final types.User? value;
+  final types.User? recipient;
   final Directory modelDir;
   final Isar isar;
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: SolipsisChatHome(value: value, modelDir: modelDir, isar: isar));
+        child: SolipsisChatHome(
+            recipient: recipient, modelDir: modelDir, isar: isar));
   }
 }

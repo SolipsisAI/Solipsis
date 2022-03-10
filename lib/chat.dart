@@ -14,10 +14,10 @@ import 'utils.dart';
 
 class SolipsisChatHome extends StatefulWidget {
   const SolipsisChatHome(
-      {Key? key, this.value, required this.modelDir, required this.isar})
+      {Key? key, this.recipient, required this.modelDir, required this.isar})
       : super(key: key);
 
-  final types.User? value;
+  final types.User? recipient;
 
   final Directory modelDir;
   final Isar isar;
@@ -46,6 +46,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
     //             text: widget.chatMessages[i].text));
     //   });
     // }
+    logger.log("[Loading] Trying to get messages");
     getMessages().then((results) => {
           for (var result in results)
             {
@@ -61,13 +62,13 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   }
 
   Future<List<ChatMessage>> getMessages() async {
-    if (widget.value == null) {
+    if (widget.recipient == null) {
       return [];
     }
 
     final results = await widget.isar.chatMessages
         .filter()
-        .recipientUuidEqualTo(widget.value!.id)
+        .recipientUuidEqualTo(widget.recipient!.id)
         .findAll();
     return results;
   }
@@ -109,8 +110,12 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
     final modelDirPath = widget.modelDir.path;
     final responseText = await api.chat(modelDirPath: modelDirPath, text: text);
 
+    if (widget.recipient == null) {
+      return;
+    }
+
     final message = types.TextMessage(
-        author: botUser,
+        author: widget.recipient!,
         createdAt: currentTimestamp(),
         id: randomString(),
         text: responseText);
@@ -127,7 +132,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
       ..authorUuid = message.author.id
       ..uuid = message.id
       ..text = message.text
-      ..recipientUuid = widget.value!.id;
+      ..recipientUuid = widget.recipient!.id;
 
     if (write == true) {
       await widget.isar.writeTxn((isar) async {
@@ -178,9 +183,10 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
 
   @override
   Widget build(BuildContext context) {
-    String userName = widget.value != null && widget.value!.firstName != null
-        ? "${widget.value!.firstName}"
-        : "";
+    String userName =
+        widget.recipient != null && widget.recipient!.firstName != null
+            ? "${widget.recipient!.firstName}"
+            : "";
     return Scaffold(
       appBar: AppBar(
           title: Text(userName), backgroundColor: const Color(0xff212429)),
