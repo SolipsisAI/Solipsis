@@ -2,7 +2,9 @@ import 'dart:developer' as logger;
 
 import 'dart:io';
 import 'dart:convert';
+import 'package:eliza/models/chat_message.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:http/http.dart' as http;
@@ -202,4 +204,12 @@ int messageDelay(types.TextMessage message) {
   final List words = message.text.split(" ");
   final int wordCount = words.length;
   return (wordCount ~/ wordsPerMinute) * 60;
+}
+
+types.TextMessage convertMessage(ChatMessage chatMessage) {
+  return types.TextMessage(
+      author: getUserByUuid(chatMessage.authorUuid),
+      id: chatMessage.uuid,
+      text: chatMessage.text,
+      createdAt: chatMessage.createdAt);
 }

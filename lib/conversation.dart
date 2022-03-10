@@ -2,12 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 import 'chat.dart';
 import 'models/chat_message.dart';
-import 'models/chat_user.dart';
 import 'utils.dart';
 import 'layouts/two_columns.dart';
 
@@ -101,39 +99,10 @@ class ConversationView extends StatelessWidget {
   final Directory modelDir;
   final Isar isar;
 
-  Stream<List<ChatMessage>> execQuery() {
-    if (recipient == null) {
-      return isar.chatMessages.where().build().watch(initialReturn: true);
-    }
-
-    return isar.chatMessages
-        .filter()
-        .recipientUuidEqualTo(recipient!.id)
-        .build()
-        .watch();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: SafeArea(
-          child: StreamBuilder(
-            stream: execQuery(),
-            builder: (context, AsyncSnapshot<List<ChatMessage>?> data) {
-              if (data.hasData) {
-                return SolipsisChatHome(
-                    recipient: recipient, modelDir: modelDir, isar: isar);
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-        ),
-      ),
-    );
+    return Center(
+        child: SolipsisChatHome(
+            isar: isar, modelDir: modelDir, recipient: recipient));
   }
 }
