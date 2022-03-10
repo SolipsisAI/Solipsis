@@ -27,11 +27,12 @@ class SolipsisChatHome extends StatefulWidget {
 class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   bool _showTyping = false;
   // int _page = 0;
-  List<types.TextMessage> _messages = [];
+  final List<types.TextMessage> _messages = [];
 
   @override
   void initState() {
     super.initState();
+    loadMessages();
   }
 
   // @override
