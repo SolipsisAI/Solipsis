@@ -16,25 +16,19 @@ void main() async {
   final dir = await getApplicationSupportDirectory();
   final Isar _isar = await Isar.open(
       schemas: [ChatMessageSchema, ChatUserSchema], directory: dir.path);
-  final chatMessages = await _isar.chatMessages.where().findAll();
 
   // Download files
   final modelDir = await downloadModelFiles("dialogpt-medium");
 
-  runApp(ElizaApp(modelDir: modelDir, isar: _isar, chatMessages: chatMessages));
+  runApp(ElizaApp(modelDir: modelDir, isar: _isar));
 }
 
 class ElizaApp extends StatelessWidget {
-  const ElizaApp(
-      {Key? key,
-      required this.modelDir,
-      required this.isar,
-      required this.chatMessages})
+  const ElizaApp({Key? key, required this.modelDir, required this.isar})
       : super(key: key);
 
   final Directory modelDir;
   final Isar isar;
-  final List<ChatMessage> chatMessages;
 
   static const String _title = 'Eliza';
 
@@ -51,23 +45,17 @@ class ElizaApp extends StatelessWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: _title,
-          home: MyStatefulWidget(
-              modelDir: modelDir, isar: isar, chatMessages: chatMessages),
+          home: MyStatefulWidget(modelDir: modelDir, isar: isar),
         ));
   }
 }
 
 class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget(
-      {Key? key,
-      required this.modelDir,
-      required this.isar,
-      required this.chatMessages})
+  const MyStatefulWidget({Key? key, required this.modelDir, required this.isar})
       : super(key: key);
 
   final Directory modelDir;
   final Isar isar;
-  final List<ChatMessage> chatMessages;
 
   @override
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
@@ -114,7 +102,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             child: ConversationHome(
               modelDir: widget.modelDir,
               isar: widget.isar,
-              chatMessages: widget.chatMessages,
             ),
           )
         ],

@@ -14,18 +14,13 @@ import 'utils.dart';
 
 class SolipsisChatHome extends StatefulWidget {
   const SolipsisChatHome(
-      {Key? key,
-      this.value,
-      required this.modelDir,
-      required this.isar,
-      required this.chatMessages})
+      {Key? key, this.value, required this.modelDir, required this.isar})
       : super(key: key);
 
   final types.User? value;
 
   final Directory modelDir;
   final Isar isar;
-  final List<ChatMessage> chatMessages;
 
   @override
   _SolipsisChatHomeState createState() => _SolipsisChatHomeState();
@@ -40,17 +35,41 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
   @override
   void initState() {
     super.initState();
-    for (var i = 0; i < widget.chatMessages.length; i++) {
-      setState(() {
-        _messages.insert(
-            0,
-            types.TextMessage(
-                author: types.User(id: widget.chatMessages[i].userUuid),
-                id: widget.chatMessages[i].uuid,
-                createdAt: widget.chatMessages[i].createdAt,
-                text: widget.chatMessages[i].text));
-      });
+    // for (var message in _messages) {
+    //   setState(() {
+    //     _messages.insert(
+    //         0,
+    //         types.TextMessage(
+    //             author: types.User(id: widget.chatMessages[i].userUuid),
+    //             id: widget.chatMessages[i].uuid,
+    //             createdAt: widget.chatMessages[i].createdAt,
+    //             text: widget.chatMessages[i].text));
+    //   });
+    // }
+    getMessages().then((results) => {
+          for (var result in results)
+            {
+              _addMessage(
+                  types.TextMessage(
+                      author: types.User(id: result.authorUuid),
+                      id: result.uuid,
+                      createdAt: result.createdAt,
+                      text: result.text),
+                  false)
+            }
+        });
+  }
+
+  Future<List<ChatMessage>> getMessages() async {
+    if (widget.value == null) {
+      return [];
     }
+
+    final results = await widget.isar.chatMessages
+        .filter()
+        .recipientUuidEqualTo(widget.value!.id)
+        .findAll();
+    return results;
   }
 
   Future<void> _handleEndReached() async {
@@ -99,19 +118,22 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
     await Future.delayed(
         Duration(seconds: messageDelay(message)), () => _showTyping = false);
 
-    _addMessage(message);
+    _addMessage(message, true);
   }
 
-  void _addMessage(types.TextMessage message) async {
+  void _addMessage(types.TextMessage message, bool write) async {
     final newMessage = ChatMessage()
       ..createdAt = message.createdAt!
-      ..userUuid = message.author.id
+      ..authorUuid = message.author.id
       ..uuid = message.id
-      ..text = message.text;
+      ..text = message.text
+      ..recipientUuid = widget.value!.id;
 
-    await widget.isar.writeTxn((isar) async {
-      await isar.chatMessages.put(newMessage);
-    });
+    if (write == true) {
+      await widget.isar.writeTxn((isar) async {
+        await isar.chatMessages.put(newMessage);
+      });
+    }
 
     setState(() {
       _messages.insert(0, message);
@@ -127,7 +149,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
       text: message.text,
     );
 
-    _addMessage(textMessage);
+    _addMessage(textMessage, true);
     _handleBotResponse(message.text);
   }
 

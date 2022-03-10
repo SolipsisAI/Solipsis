@@ -12,16 +12,11 @@ import 'utils.dart';
 import 'layouts/two_columns.dart';
 
 class ConversationHome extends StatefulWidget {
-  const ConversationHome(
-      {Key? key,
-      required this.modelDir,
-      required this.isar,
-      required this.chatMessages})
+  const ConversationHome({Key? key, required this.modelDir, required this.isar})
       : super(key: key);
 
   final Directory modelDir;
   final Isar isar;
-  final List<ChatMessage> chatMessages;
 
   @override
   _ConversationHomeState createState() => _ConversationHomeState();
@@ -52,7 +47,6 @@ class _ConversationHomeState extends State<ConversationHome> {
               value: _selected.value,
               modelDir: widget.modelDir,
               isar: widget.isar,
-              chatMessages: widget.chatMessages,
             ),
           );
         },
@@ -101,25 +95,16 @@ class ConversationList extends StatelessWidget {
 
 class ConversationView extends StatelessWidget {
   const ConversationView(
-      {Key? key,
-      this.value,
-      required this.modelDir,
-      required this.isar,
-      required this.chatMessages})
+      {Key? key, this.value, required this.modelDir, required this.isar})
       : super(key: key);
 
   final types.User? value;
   final Directory modelDir;
   final Isar isar;
-  final List<ChatMessage> chatMessages;
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: SolipsisChatHome(
-            value: value,
-            modelDir: modelDir,
-            isar: isar,
-            chatMessages: chatMessages));
+        child: SolipsisChatHome(value: value, modelDir: modelDir, isar: isar));
   }
 }
