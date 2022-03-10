@@ -28,7 +28,7 @@ class ConversationHome extends StatefulWidget {
 }
 
 class _ConversationHomeState extends State<ConversationHome> {
-  List<types.User> items = [botUser];
+  List<types.User> items = [botUser, dummyUser];
   ValueNotifier<types.User?> _selected = ValueNotifier(null);
 
   void _selectValue(types.User? val) => _selected.value = val;
@@ -44,7 +44,10 @@ class _ConversationHomeState extends State<ConversationHome> {
             paneProportion: 30,
             showPane2: (_selected.value != null) ? true : false,
             onClosePane2Popup: _clearSelected,
-            pane1: ConversationList(items: items, selectValue: _selectValue),
+            pane1: ConversationList(
+                value: _selected.value,
+                items: items,
+                selectValue: _selectValue),
             pane2: ConversationView(
               value: _selected.value,
               modelDir: widget.modelDir,
@@ -62,10 +65,12 @@ class _ConversationHomeState extends State<ConversationHome> {
 class ConversationList extends StatelessWidget {
   const ConversationList({
     Key? key,
+    this.value,
     required this.selectValue,
     required this.items,
   }) : super(key: key);
 
+  final types.User? value;
   final void Function(types.User?) selectValue;
   final List<types.User> items;
 
@@ -77,10 +82,13 @@ class ConversationList extends StatelessWidget {
         children: [
           ...items.map(
             (e) => Card(
-              color: const Color(0xff3a3a3a),
+              color: e.id == value!.id
+                  ? const Color(0xff3a3a3a)
+                  : const Color(0xff232323),
               child: ListTile(
                 textColor: Colors.white,
                 title: Text("${e.firstName} ${e.lastName}"),
+                subtitle: const Text("That's good"),
                 onTap: () => selectValue(e),
               ),
             ),

@@ -16,6 +16,10 @@ const botUser = types.User(
     id: '09778d0f-fb94-4ac6-8d72-96112805f3ad',
     firstName: 'Eliza',
     lastName: '');
+const dummyUser = types.User(
+    id: '6b340874-fd30-485e-b0ca-e04fb4030309',
+    firstName: 'Grace',
+    lastName: 'Hopper');
 
 const String loremIpsumApiUrl =
     'https://litipsum.com/api/dr-jekyll-and-mr-hyde/1/json';
