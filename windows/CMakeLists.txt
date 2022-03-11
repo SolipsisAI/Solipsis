@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(eliza LANGUAGES CXX)
+project(Solipsis LANGUAGES CXX)
 
-set(BINARY_NAME "eliza")
+set(BINARY_NAME "Solipsis")
 
 cmake_policy(SET CMP0063 NEW)
 

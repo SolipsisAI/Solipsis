@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "eliza")
-set(APPLICATION_ID "ai.solipsis.eliza")
+set(BINARY_NAME "Solipsis")
+set(APPLICATION_ID "ai.solipsis.Solipsis")
 
 cmake_policy(SET CMP0063 NEW)
 

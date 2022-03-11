@@ -1,4 +1,4 @@
-package ai.solipsis.eliza
+package ai.solipsis.Solipsis
 
 import io.flutter.embedding.android.FlutterActivity
 

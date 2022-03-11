@@ -20,17 +20,17 @@ void main() async {
   // Download files
   final modelDir = await downloadModelFiles("dialogpt-medium");
 
-  runApp(ElizaApp(modelDir: modelDir, isar: _isar));
+  runApp(SolipsisApp(modelDir: modelDir, isar: _isar));
 }
 
-class ElizaApp extends StatelessWidget {
-  const ElizaApp({Key? key, required this.modelDir, required this.isar})
+class SolipsisApp extends StatelessWidget {
+  const SolipsisApp({Key? key, required this.modelDir, required this.isar})
       : super(key: key);
 
   final Directory modelDir;
   final Isar isar;
 
-  static const String _title = 'Eliza';
+  static const String _title = 'Solipsis';
 
   @override
   Widget build(BuildContext context) {

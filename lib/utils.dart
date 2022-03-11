@@ -2,7 +2,7 @@ import 'dart:developer' as logger;
 
 import 'dart:io';
 import 'dart:convert';
-import 'package:eliza/models/chat_message.dart';
+import 'package:Solipsis/models/chat_message.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:uuid/uuid.dart';
@@ -16,7 +16,7 @@ const myUser = types.User(
     lastName: 'Julian');
 const botUser = types.User(
     id: '09778d0f-fb94-4ac6-8d72-96112805f3ad',
-    firstName: 'Eliza',
+    firstName: 'Solipsis',
     lastName: '');
 const dummyUser = types.User(
     id: '6b340874-fd30-485e-b0ca-e04fb4030309',

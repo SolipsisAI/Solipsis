@@ -1,4 +1,4 @@
-# eliza
+# Solipsis
 
 This repository serves as a template for Flutter projects calling into native Rust
 libraries via `flutter_rust_bridge`.
