@@ -1,18 +1,6 @@
-use cortex::ops::dialoguer::DialogueManager;
-use cortex::ops::question_answerer::QuestionAnswerManager;
-use cortex::ops::summarizer::SummaryManager;
+use cortex::core::Cortex;
 
-pub fn ask_me(model_dir_path: String, question: String, context: String) -> String {
-    let manager = QuestionAnswerManager::new(model_dir_path);
-    manager.ask(question, context)
-}
-
-pub fn chat(model_dir_path: String, text: String) -> String {
-    let mut manager = DialogueManager::new(model_dir_path);
-    manager.send(text)
-}
-
-pub fn summarize(model_dir_path: String, text: String) -> String {
-    let manager = SummaryManager::new(model_dir_path);
-    manager.summarize(text)
+pub fn chat(models_path: String, text: String) -> String {
+    let mut cortex_core = Cortex::new(models_path);
+    cortex_core.chat(text)
 }

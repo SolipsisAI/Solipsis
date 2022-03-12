@@ -136,20 +136,20 @@ Future<Directory> downloadModelFiles(String modelName) async {
 
   logger.log('[APPDIR] $appdirpath');
 
-  final downloaddir = await Directory('$appdirpath/cortex/models/$modelName')
+  final modeldir = await Directory('$appdirpath/cortex/models/$modelName')
       .create(recursive: true);
 
   final resource = resources[modelName];
 
   if (resource != null) {
     for (var v in resource.values) {
-      downloadFile(v['url'], v['filename'], v['type'], downloaddir.path);
+      downloadFile(v['url'], v['filename'], v['type'], modeldir.path);
     }
   } else {
     logger.log("[FAIL] Resource $modelName does not exist");
   }
 
-  return downloaddir;
+  return modeldir;
 }
 
 void downloadFile(

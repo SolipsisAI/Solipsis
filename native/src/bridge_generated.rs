@@ -17,31 +17,9 @@ use flutter_rust_bridge::*;
 // Section: wire functions
 
 #[no_mangle]
-pub extern "C" fn wire_ask_me(
-    port_: i64,
-    model_dir_path: *mut wire_uint_8_list,
-    question: *mut wire_uint_8_list,
-    context: *mut wire_uint_8_list,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
-        WrapInfo {
-            debug_name: "ask_me",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_model_dir_path = model_dir_path.wire2api();
-            let api_question = question.wire2api();
-            let api_context = context.wire2api();
-            move |task_callback| Ok(ask_me(api_model_dir_path, api_question, api_context))
-        },
-    )
-}
-
-#[no_mangle]
 pub extern "C" fn wire_chat(
     port_: i64,
-    model_dir_path: *mut wire_uint_8_list,
+    models_path: *mut wire_uint_8_list,
     text: *mut wire_uint_8_list,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
@@ -51,29 +29,9 @@ pub extern "C" fn wire_chat(
             mode: FfiCallMode::Normal,
         },
         move || {
-            let api_model_dir_path = model_dir_path.wire2api();
+            let api_models_path = models_path.wire2api();
             let api_text = text.wire2api();
-            move |task_callback| Ok(chat(api_model_dir_path, api_text))
-        },
-    )
-}
-
-#[no_mangle]
-pub extern "C" fn wire_summarize(
-    port_: i64,
-    model_dir_path: *mut wire_uint_8_list,
-    text: *mut wire_uint_8_list,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
-        WrapInfo {
-            debug_name: "summarize",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_model_dir_path = model_dir_path.wire2api();
-            let api_text = text.wire2api();
-            move |task_callback| Ok(summarize(api_model_dir_path, api_text))
+            move |task_callback| Ok(chat(api_models_path, api_text))
         },
     )
 }
