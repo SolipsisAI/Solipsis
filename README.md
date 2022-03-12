@@ -1,26 +1,31 @@
 # Solipsis
 
-This repository serves as a template for Flutter projects calling into native Rust
-libraries via `flutter_rust_bridge`.
-
 <a href="https://www.flaticon.com/free-icons/chatbot" title="chatbot icons">Chatbot icons created by Flat Icons - Flaticon</a>
 
-## Getting Started
+# Development
 
-To begin, ensure that you have a working installation of the following items:
-- [Flutter SDK](https://docs.flutter.dev/get-started/install)
-- [Rust language](https://rustup.rs/)
-- Appropriate [Rust targets](https://rust-lang.github.io/rustup/cross-compilation.html) for cross-compiling to your device
-- For Android targets:
-    - Install [cargo-ndk](https://github.com/bbqsrc/cargo-ndk#installing)
-    - Install Android NDK 22, then put its path in one of the `gradle.properties`, e.g.:
+First, make sure `rust` and `flutter` are both installed.
 
-```
-echo "ANDROID_NDK=.." >> ~/.gradle/gradle.properties
+Then install and set up the dependencies.
+
+```shell
+cargo install flutter_rust_bridge_codegen cbindgen just
+dart pub global activate ffigen
 ```
 
-- Web is not supported yet.
+## LLVM
 
-Then go ahead and run `flutter run`! When you're ready, refer to our documentation
-[here](https://fzyzcjy.github.io/flutter_rust_bridge/index.html)
-to learn how to write and use binding code.
+LLVM is required for ffigen to work.
+
+**Ubuntu**
+```shell
+sudo apt update && sudo apt install libclang-dev
+
+# Create a symlink in /usr/lib since that's where ffigen looks
+! test -f /usr/lib/libclang.so && sudo ln -s /usr/lib/llvm-13/lib/libclang.so /usr/lib/libclang.so
+```
+
+**macOS**
+```shell
+brew install llvm
+```
