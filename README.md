@@ -29,3 +29,52 @@ sudo apt update && sudo apt install libclang-dev
 ```shell
 brew install llvm
 ```
+
+## Libtorch
+
+### Linux
+
+This requires `libtorch`. Download from [here](https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-1.10.1%2Bcpu.zip).
+
+Or:
+
+```bash
+curl -L -O https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-1.10.1%2Bcpu.zip
+```
+
+Then unzip into the root of your project.
+
+```bash
+unzip libtorch-cxx11-abi-shared-with-deps-1.10.1%2Bcpu.zip -d path/to/project/root
+```
+
+Then set these environment variables
+
+```shell
+export LIBTORCH=$(pwd)/libtorch
+export LD_LIBRARY_PATH=${LIBTORCH}/lib:$LD_LIBRARY_PATH
+```
+
+### macOS
+
+Go to [PyTorch](https://pytorch.org/get-started/locally/) and in Package -> LibTorch. Click on the link generated.
+
+Or:
+
+```bash
+curl -L -O https://download.pytorch.org/libtorch/cpu/libtorch-macos-1.10.2.zip
+```
+
+Then unzip into a directory:
+
+```bash
+mkdir -p ~/Developer/packages
+unzip libtorch-macos-1.10.2.zip -d ~/Developer/packages/
+```
+
+Create a symlink:
+
+```bash
+cd
+ln -s ~/Developer/packages/libtorch/lib
+```
