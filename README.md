@@ -2,7 +2,16 @@
 
 <a href="https://www.flaticon.com/free-icons/chatbot" title="chatbot icons">Chatbot icons created by Flat Icons - Flaticon</a>
 
-# Development
+- [Solipsis](#solipsis)
+- [Development Setup](#development-setup)
+  - [LLVM](#llvm)
+    - [Ubuntu](#ubuntu)
+    - [macOS](#macos)
+  - [Libtorch](#libtorch)
+    - [Linux](#linux)
+    - [macOS](#macos-1)
+
+# Development Setup
 
 First, make sure `rust` and `flutter` are both installed.
 
@@ -17,7 +26,8 @@ dart pub global activate ffigen
 
 LLVM is required for ffigen to work.
 
-**Ubuntu**
+### Ubuntu
+
 ```shell
 sudo apt update && sudo apt install libclang-dev
 
@@ -25,7 +35,8 @@ sudo apt update && sudo apt install libclang-dev
 ! test -f /usr/lib/libclang.so && sudo ln -s /usr/lib/llvm-13/lib/libclang.so /usr/lib/libclang.so
 ```
 
-**macOS**
+### macOS
+
 ```shell
 brew install llvm
 ```
