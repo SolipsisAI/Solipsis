@@ -90,6 +90,26 @@ const resources = {
       'filename': 'config.json',
       'type': 'string',
     }
+  },
+  'distilbert-qa': {
+    'model': {
+      'url':
+          'https://huggingface.co/bert-large-cased-whole-word-masking-finetuned-squad/resolve/main/rust_model.ot',
+      'filename': 'rust_model.ot',
+      'type': 'bytes',
+    },
+    'config': {
+      'url':
+          'https://huggingface.co/bert-large-cased-whole-word-masking-finetuned-squad/resolve/main/config.json',
+      'filename': 'config.json',
+      'type': 'string'
+    },
+    'vocab': {
+      'url':
+          'https://huggingface.co/bert-large-cased-whole-word-masking-finetuned-squad/resolve/main/vocab.txt',
+      'filename': 'vocab.txt',
+      'type': 'string'
+    }
   }
 };
 
@@ -129,6 +149,17 @@ Future<bool> verifyModelFilesDownloaded(String modelName) async {
   }
 
   return isDownloaded;
+}
+
+Future<Directory> downloadAll() async {
+  logger.log("[DOWNLOADING] Downloading all models");
+  String appdirpath = (await getApplicationSupportDirectory()).path;
+
+  for (var modelName in resources.keys) {
+    downloadModelFiles(modelName);
+  }
+
+  return Directory('$appdirpath/cortex/models/');
 }
 
 Future<Directory> downloadModelFiles(String modelName) async {

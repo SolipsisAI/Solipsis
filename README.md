@@ -86,6 +86,5 @@ unzip libtorch-macos-1.10.2.zip -d ~/Developer/packages/
 Create a symlink:
 
 ```bash
-cd
-ln -s ~/Developer/packages/libtorch/lib
+ln -s ~/Developer/packages/libtorch/lib/libtorch_cpu.dylib /usr/local/lib/
 ```

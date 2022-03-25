@@ -18,7 +18,7 @@ void main() async {
       schemas: [ChatMessageSchema, ChatUserSchema], directory: dir.path);
 
   // Download files
-  final modelDir = await downloadModelFiles("dialogpt-medium");
+  final modelDir = await downloadAll();
 
   runApp(SolipsisApp(modelDir: modelDir, isar: _isar));
 }

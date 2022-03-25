@@ -112,7 +112,7 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
       return;
     }
 
-    final modelDirPath = widget.modelDir.parent.path;
+    final modelDirPath = widget.modelDir.path;
 
     _showTyping = true;
 
