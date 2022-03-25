@@ -17,11 +17,7 @@ use flutter_rust_bridge::*;
 // Section: wire functions
 
 #[no_mangle]
-pub extern "C" fn wire_chat(
-    port_: i64,
-    models_path: *mut wire_uint_8_list,
-    text: *mut wire_uint_8_list,
-) {
+pub extern "C" fn wire_chat(port_: i64, text: *mut wire_uint_8_list) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
         WrapInfo {
             debug_name: "chat",
@@ -29,9 +25,8 @@ pub extern "C" fn wire_chat(
             mode: FfiCallMode::Normal,
         },
         move || {
-            let api_models_path = models_path.wire2api();
             let api_text = text.wire2api();
-            move |task_callback| Ok(chat(api_models_path, api_text))
+            move |task_callback| Ok(chat(api_text))
         },
     )
 }
