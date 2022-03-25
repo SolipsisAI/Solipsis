@@ -1,6 +1,9 @@
-use cortex::core::Cortex;
+use std::path::PathBuf;
+
+use cortex::managers::dialoguer::DialogueManager;
 
 pub fn chat(models_path: String, text: String) -> String {
-    let mut cortex_core = Cortex::new(models_path);
-    cortex_core.chat(text)
+    let models_dir = PathBuf::from(models_path);
+    let mut dialoguer = DialogueManager::new(models_dir.join("dialogpt-medium"));
+    dialoguer.send(text)
 }
