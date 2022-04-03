@@ -12,7 +12,8 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'dart:ffi' as ffi;
 
 abstract class Native {
-  Future<String> chat({required String text, dynamic hint});
+  Future<String> chat(
+      {required String text, required String userId, dynamic hint});
 }
 
 class NativeImpl extends FlutterRustBridgeBase<NativeWire> implements Native {
@@ -21,15 +22,17 @@ class NativeImpl extends FlutterRustBridgeBase<NativeWire> implements Native {
 
   NativeImpl.raw(NativeWire inner) : super(inner);
 
-  Future<String> chat({required String text, dynamic hint}) =>
+  Future<String> chat(
+          {required String text, required String userId, dynamic hint}) =>
       executeNormal(FlutterRustBridgeTask(
-        callFfi: (port_) => inner.wire_chat(port_, _api2wire_String(text)),
+        callFfi: (port_) => inner.wire_chat(
+            port_, _api2wire_String(text), _api2wire_String(userId)),
         parseSuccessData: _wire2api_String,
         constMeta: const FlutterRustBridgeTaskConstMeta(
           debugName: "chat",
-          argNames: ["text"],
+          argNames: ["text", "userId"],
         ),
-        argValues: [text],
+        argValues: [text, userId],
         hint: hint,
       ));
 
@@ -90,19 +93,22 @@ class NativeWire implements FlutterRustBridgeWireBase {
   void wire_chat(
     int port_,
     ffi.Pointer<wire_uint_8_list> text,
+    ffi.Pointer<wire_uint_8_list> user_id,
   ) {
     return _wire_chat(
       port_,
       text,
+      user_id,
     );
   }
 
   late final _wire_chatPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Void Function(
-              ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>('wire_chat');
-  late final _wire_chat = _wire_chatPtr
-      .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+          ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_chat');
+  late final _wire_chat = _wire_chatPtr.asFunction<
+      void Function(
+          int, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
 
   ffi.Pointer<wire_uint_8_list> new_uint_8_list(
     int len,

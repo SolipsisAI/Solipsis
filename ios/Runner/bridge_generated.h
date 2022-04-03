@@ -17,7 +17,7 @@ typedef int64_t DartPort;
 
 typedef bool (*DartPostCObjectFnType)(DartPort port_id, void *message);
 
-void wire_chat(int64_t port_, struct wire_uint_8_list *text);
+void wire_chat(int64_t port_, struct wire_uint_8_list *text, struct wire_uint_8_list *user_id);
 
 struct wire_uint_8_list *new_uint_8_list(int32_t len);
 
