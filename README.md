@@ -11,6 +11,7 @@
     - [Linux](#linux)
     - [macOS](#macos-1)
 - [Build & Run](#build--run)
+  - [Setup Local Dependencies](#setup-local-dependencies)
   - [Prepare the build](#prepare-the-build)
   - [Run](#run)
 
@@ -95,6 +96,25 @@ ln -s ~/Developer/packages/libtorch/lib/libtorch_cpu.dylib /usr/local/lib/
 # Build & Run
 
 Follow the [Development Setup](#development-setup) instructions first.
+
+## Setup Local Dependencies
+
+This depends on some custom libraries that need to be fetched in the same directory this repo will be in.
+
+- [batched-mut-fn](https://github.com/SolipsisAI/batched-mut-fn)
+- [rust-cortex](https://github.com/SolipsisAI/rust_cortex)
+
+```bash
+# example dir
+export PROJECT_DIR=~/Projects/SolipsisAI/code
+
+mkdir -p $PROJECT_DIR
+cd $PROJECT_DIR
+
+git clone git@github.com:SolipsisAI/rust_cortex.git
+git clone git@github.com:SolipsisAI/batched-mut-fn.git
+git clone git@github.com:SolipsisAI/Solipsis.git
+```
 
 ## Prepare the build
 
