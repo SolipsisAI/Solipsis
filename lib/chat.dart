@@ -116,7 +116,8 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
 
     _showTyping = true;
 
-    final responseText = await api.chat(modelsPath: modelDirPath, text: text);
+    final responseText =
+        await api.chat(text: text, userId: widget.recipient!.id);
 
     final message = types.TextMessage(
         author: widget.recipient!,

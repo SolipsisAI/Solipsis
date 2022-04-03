@@ -13,7 +13,7 @@ import 'dart:ffi' as ffi;
 
 abstract class Native {
   Future<String> chat(
-      {required String modelsPath, required String text, dynamic hint});
+      {required String text, required String userId, dynamic hint});
 }
 
 class NativeImpl extends FlutterRustBridgeBase<NativeWire> implements Native {
@@ -23,16 +23,16 @@ class NativeImpl extends FlutterRustBridgeBase<NativeWire> implements Native {
   NativeImpl.raw(NativeWire inner) : super(inner);
 
   Future<String> chat(
-          {required String modelsPath, required String text, dynamic hint}) =>
+          {required String text, required String userId, dynamic hint}) =>
       executeNormal(FlutterRustBridgeTask(
         callFfi: (port_) => inner.wire_chat(
-            port_, _api2wire_String(modelsPath), _api2wire_String(text)),
+            port_, _api2wire_String(text), _api2wire_String(userId)),
         parseSuccessData: _wire2api_String,
         constMeta: const FlutterRustBridgeTaskConstMeta(
           debugName: "chat",
-          argNames: ["modelsPath", "text"],
+          argNames: ["text", "userId"],
         ),
-        argValues: [modelsPath, text],
+        argValues: [text, userId],
         hint: hint,
       ));
 
@@ -92,13 +92,13 @@ class NativeWire implements FlutterRustBridgeWireBase {
 
   void wire_chat(
     int port_,
-    ffi.Pointer<wire_uint_8_list> models_path,
     ffi.Pointer<wire_uint_8_list> text,
+    ffi.Pointer<wire_uint_8_list> user_id,
   ) {
     return _wire_chat(
       port_,
-      models_path,
       text,
+      user_id,
     );
   }
 
