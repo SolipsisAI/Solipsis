@@ -10,6 +10,9 @@
   - [Libtorch](#libtorch)
     - [Linux](#linux)
     - [macOS](#macos-1)
+- [Build & Run](#build--run)
+  - [Prepare the build](#prepare-the-build)
+  - [Run](#run)
 
 # Development Setup
 
@@ -87,4 +90,31 @@ Create a symlink:
 
 ```bash
 ln -s ~/Developer/packages/libtorch/lib/libtorch_cpu.dylib /usr/local/lib/
+```
+
+# Build & Run
+
+Follow the [Development Setup](#development-setup) instructions first.
+
+## Prepare the build
+
+```bash
+# Run flutter clean and delete some build dirs 
+just clean
+
+# Run build runner to generate code for the rust bridge
+just
+```
+
+## Run
+
+```bash
+# Check what devices you can run on currently
+flutter devices
+
+# Linux
+flutter run -d linux
+
+# macOS
+flutter run -d macos
 ```
