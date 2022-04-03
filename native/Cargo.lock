@@ -65,7 +65,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "904dfeac50f3cdaba28fc6f57fdcddb75f49ed61346676a78c4ffe55877802fd"
 
 [[package]]
-name = "batched-fn"
+name = "batched-mut-fn"
 version = "0.2.4"
 dependencies = [
  "flume",
@@ -210,7 +210,7 @@ name = "cortex"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "batched-fn",
+ "batched-mut-fn",
  "once_cell",
  "rust-bert",
  "serde",
