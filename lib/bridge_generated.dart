@@ -12,8 +12,18 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'dart:ffi' as ffi;
 
 abstract class Native {
-  Future<String> chat(
-      {required String text, required String userId, dynamic hint});
+  Future<Output> chat(
+      {required String text, required String conversationId, dynamic hint});
+}
+
+class Output {
+  final String text;
+  final String conversationId;
+
+  Output({
+    required this.text,
+    required this.conversationId,
+  });
 }
 
 class NativeImpl extends FlutterRustBridgeBase<NativeWire> implements Native {
@@ -22,17 +32,19 @@ class NativeImpl extends FlutterRustBridgeBase<NativeWire> implements Native {
 
   NativeImpl.raw(NativeWire inner) : super(inner);
 
-  Future<String> chat(
-          {required String text, required String userId, dynamic hint}) =>
+  Future<Output> chat(
+          {required String text,
+          required String conversationId,
+          dynamic hint}) =>
       executeNormal(FlutterRustBridgeTask(
         callFfi: (port_) => inner.wire_chat(
-            port_, _api2wire_String(text), _api2wire_String(userId)),
-        parseSuccessData: _wire2api_String,
+            port_, _api2wire_String(text), _api2wire_String(conversationId)),
+        parseSuccessData: _wire2api_output,
         constMeta: const FlutterRustBridgeTaskConstMeta(
           debugName: "chat",
-          argNames: ["text", "userId"],
+          argNames: ["text", "conversationId"],
         ),
-        argValues: [text, userId],
+        argValues: [text, conversationId],
         hint: hint,
       ));
 
@@ -58,6 +70,16 @@ class NativeImpl extends FlutterRustBridgeBase<NativeWire> implements Native {
 // Section: wire2api
 String _wire2api_String(dynamic raw) {
   return raw as String;
+}
+
+Output _wire2api_output(dynamic raw) {
+  final arr = raw as List<dynamic>;
+  if (arr.length != 2)
+    throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+  return Output(
+    text: _wire2api_String(arr[0]),
+    conversationId: _wire2api_String(arr[1]),
+  );
 }
 
 int _wire2api_u8(dynamic raw) {
@@ -93,12 +115,12 @@ class NativeWire implements FlutterRustBridgeWireBase {
   void wire_chat(
     int port_,
     ffi.Pointer<wire_uint_8_list> text,
-    ffi.Pointer<wire_uint_8_list> user_id,
+    ffi.Pointer<wire_uint_8_list> conversation_id,
   ) {
     return _wire_chat(
       port_,
       text,
-      user_id,
+      conversation_id,
     );
   }
 

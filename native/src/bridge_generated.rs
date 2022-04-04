@@ -20,7 +20,7 @@ use flutter_rust_bridge::*;
 pub extern "C" fn wire_chat(
     port_: i64,
     text: *mut wire_uint_8_list,
-    user_id: *mut wire_uint_8_list,
+    conversation_id: *mut wire_uint_8_list,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
         WrapInfo {
@@ -30,8 +30,8 @@ pub extern "C" fn wire_chat(
         },
         move || {
             let api_text = text.wire2api();
-            let api_user_id = user_id.wire2api();
-            move |task_callback| Ok(chat(api_text, api_user_id))
+            let api_conversation_id = conversation_id.wire2api();
+            move |task_callback| Ok(mirror_Output(chat(api_text, api_conversation_id)))
         },
     )
 }
@@ -47,8 +47,16 @@ pub struct wire_uint_8_list {
 
 // Section: wrapper structs
 
+#[derive(Clone)]
+struct mirror_Output(Output);
+
 // Section: static checks
 
+const _: fn() = || {
+    let Output = None::<Output>.unwrap();
+    let _: String = Output.text;
+    let _: String = Output.conversation_id;
+};
 // Section: allocate functions
 
 #[no_mangle]
@@ -114,6 +122,13 @@ impl<T> NewWithNullPtr for *mut T {
 }
 
 // Section: impl IntoDart
+
+impl support::IntoDart for mirror_Output {
+    fn into_dart(self) -> support::DartCObject {
+        vec![self.0.text.into_dart(), self.0.conversation_id.into_dart()].into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for mirror_Output {}
 
 // Section: executor
 
