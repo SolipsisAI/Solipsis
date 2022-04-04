@@ -112,18 +112,16 @@ class _SolipsisChatHomeState extends State<SolipsisChatHome> {
       return;
     }
 
-    final modelDirPath = widget.modelDir.path;
-
     _showTyping = true;
 
-    final responseText =
-        await api.chat(text: text, userId: widget.recipient!.id);
+    final response =
+        await api.chat(text: text, conversationId: widget.recipient!.id);
 
     final message = types.TextMessage(
         author: widget.recipient!,
         createdAt: currentTimestamp(),
         id: randomString(),
-        text: responseText);
+        text: response.text);
 
     _showTyping = false;
 
