@@ -20,6 +20,9 @@ gen:
     # Uncomment this line to invoke build_runner as well
     flutter pub run build_runner build --delete-conflicting-outputs
 
+run:
+    flutter run -d {{os()}}
+
 lint:
     cd native && cargo fmt
     dart format .

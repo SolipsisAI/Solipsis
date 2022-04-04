@@ -102,7 +102,7 @@ Follow the [Development Setup](#development-setup) instructions first.
 This depends on some custom libraries that need to be fetched in the same directory this repo will be in.
 
 - [batched-mut-fn](https://github.com/SolipsisAI/batched-mut-fn)
-- [rust-cortex](https://github.com/SolipsisAI/rust_cortex)
+- [rust-cortex](https://github.com/SolipsisAI/rust-cortex)
 
 ```bash
 # example dir
@@ -111,7 +111,7 @@ export PROJECT_DIR=~/Projects/SolipsisAI/code
 mkdir -p $PROJECT_DIR
 cd $PROJECT_DIR
 
-git clone git@github.com:SolipsisAI/rust_cortex.git
+git clone git@github.com:SolipsisAI/rust-cortex.git
 git clone git@github.com:SolipsisAI/batched-mut-fn.git
 git clone git@github.com:SolipsisAI/Solipsis.git
 ```
