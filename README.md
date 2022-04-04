@@ -129,12 +129,5 @@ just
 ## Run
 
 ```bash
-# Check what devices you can run on currently
-flutter devices
-
-# Linux
-flutter run -d linux
-
-# macOS
-flutter run -d macos
+just run
 ```
