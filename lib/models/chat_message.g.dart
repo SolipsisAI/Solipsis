@@ -17,16 +17,17 @@ extension GetChatMessageCollection on Isar {
 final ChatMessageSchema = CollectionSchema(
   name: 'ChatMessage',
   schema:
-      '{"name":"ChatMessage","idName":"id","properties":[{"name":"authorUuid","type":"String"},{"name":"createdAt","type":"Long"},{"name":"recipientUuid","type":"String"},{"name":"text","type":"String"},{"name":"uuid","type":"String"}],"indexes":[],"links":[]}',
+      '{"name":"ChatMessage","idName":"id","properties":[{"name":"authorUuid","type":"String"},{"name":"conversationUuid","type":"String"},{"name":"createdAt","type":"Long"},{"name":"recipientUuid","type":"String"},{"name":"text","type":"String"},{"name":"uuid","type":"String"}],"indexes":[],"links":[]}',
   nativeAdapter: const _ChatMessageNativeAdapter(),
   webAdapter: const _ChatMessageWebAdapter(),
   idName: 'id',
   propertyIds: {
     'authorUuid': 0,
-    'createdAt': 1,
-    'recipientUuid': 2,
-    'text': 3,
-    'uuid': 4
+    'conversationUuid': 1,
+    'createdAt': 2,
+    'recipientUuid': 3,
+    'text': 4,
+    'uuid': 5
   },
   listProperties: {},
   indexIds: {},
@@ -53,6 +54,7 @@ class _ChatMessageWebAdapter extends IsarWebTypeAdapter<ChatMessage> {
   Object serialize(IsarCollection<ChatMessage> collection, ChatMessage object) {
     final jsObj = IsarNative.newJsObject();
     IsarNative.jsObjectSet(jsObj, 'authorUuid', object.authorUuid);
+    IsarNative.jsObjectSet(jsObj, 'conversationUuid', object.conversationUuid);
     IsarNative.jsObjectSet(jsObj, 'createdAt', object.createdAt);
     IsarNative.jsObjectSet(jsObj, 'id', object.id);
     IsarNative.jsObjectSet(jsObj, 'recipientUuid', object.recipientUuid);
@@ -66,6 +68,8 @@ class _ChatMessageWebAdapter extends IsarWebTypeAdapter<ChatMessage> {
       IsarCollection<ChatMessage> collection, dynamic jsObj) {
     final object = ChatMessage();
     object.authorUuid = IsarNative.jsObjectGet(jsObj, 'authorUuid') ?? '';
+    object.conversationUuid =
+        IsarNative.jsObjectGet(jsObj, 'conversationUuid') ?? '';
     object.createdAt =
         IsarNative.jsObjectGet(jsObj, 'createdAt') ?? double.negativeInfinity;
     object.id = IsarNative.jsObjectGet(jsObj, 'id');
@@ -80,6 +84,8 @@ class _ChatMessageWebAdapter extends IsarWebTypeAdapter<ChatMessage> {
     switch (propertyName) {
       case 'authorUuid':
         return (IsarNative.jsObjectGet(jsObj, 'authorUuid') ?? '') as P;
+      case 'conversationUuid':
+        return (IsarNative.jsObjectGet(jsObj, 'conversationUuid') ?? '') as P;
       case 'createdAt':
         return (IsarNative.jsObjectGet(jsObj, 'createdAt') ??
             double.negativeInfinity) as P;
@@ -115,16 +121,19 @@ class _ChatMessageNativeAdapter extends IsarNativeTypeAdapter<ChatMessage> {
     final value0 = object.authorUuid;
     final _authorUuid = IsarBinaryWriter.utf8Encoder.convert(value0);
     dynamicSize += (_authorUuid.length) as int;
-    final value1 = object.createdAt;
-    final _createdAt = value1;
-    final value2 = object.recipientUuid;
-    final _recipientUuid = IsarBinaryWriter.utf8Encoder.convert(value2);
+    final value1 = object.conversationUuid;
+    final _conversationUuid = IsarBinaryWriter.utf8Encoder.convert(value1);
+    dynamicSize += (_conversationUuid.length) as int;
+    final value2 = object.createdAt;
+    final _createdAt = value2;
+    final value3 = object.recipientUuid;
+    final _recipientUuid = IsarBinaryWriter.utf8Encoder.convert(value3);
     dynamicSize += (_recipientUuid.length) as int;
-    final value3 = object.text;
-    final _text = IsarBinaryWriter.utf8Encoder.convert(value3);
+    final value4 = object.text;
+    final _text = IsarBinaryWriter.utf8Encoder.convert(value4);
     dynamicSize += (_text.length) as int;
-    final value4 = object.uuid;
-    final _uuid = IsarBinaryWriter.utf8Encoder.convert(value4);
+    final value5 = object.uuid;
+    final _uuid = IsarBinaryWriter.utf8Encoder.convert(value5);
     dynamicSize += (_uuid.length) as int;
     final size = staticSize + dynamicSize;
 
@@ -133,10 +142,11 @@ class _ChatMessageNativeAdapter extends IsarNativeTypeAdapter<ChatMessage> {
     final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
     final writer = IsarBinaryWriter(buffer, staticSize);
     writer.writeBytes(offsets[0], _authorUuid);
-    writer.writeLong(offsets[1], _createdAt);
-    writer.writeBytes(offsets[2], _recipientUuid);
-    writer.writeBytes(offsets[3], _text);
-    writer.writeBytes(offsets[4], _uuid);
+    writer.writeBytes(offsets[1], _conversationUuid);
+    writer.writeLong(offsets[2], _createdAt);
+    writer.writeBytes(offsets[3], _recipientUuid);
+    writer.writeBytes(offsets[4], _text);
+    writer.writeBytes(offsets[5], _uuid);
   }
 
   @override
@@ -144,11 +154,12 @@ class _ChatMessageNativeAdapter extends IsarNativeTypeAdapter<ChatMessage> {
       IsarBinaryReader reader, List<int> offsets) {
     final object = ChatMessage();
     object.authorUuid = reader.readString(offsets[0]);
-    object.createdAt = reader.readLong(offsets[1]);
+    object.conversationUuid = reader.readString(offsets[1]);
+    object.createdAt = reader.readLong(offsets[2]);
     object.id = id;
-    object.recipientUuid = reader.readString(offsets[2]);
-    object.text = reader.readString(offsets[3]);
-    object.uuid = reader.readString(offsets[4]);
+    object.recipientUuid = reader.readString(offsets[3]);
+    object.text = reader.readString(offsets[4]);
+    object.uuid = reader.readString(offsets[5]);
     return object;
   }
 
@@ -161,12 +172,14 @@ class _ChatMessageNativeAdapter extends IsarNativeTypeAdapter<ChatMessage> {
       case 0:
         return (reader.readString(offset)) as P;
       case 1:
-        return (reader.readLong(offset)) as P;
-      case 2:
         return (reader.readString(offset)) as P;
+      case 2:
+        return (reader.readLong(offset)) as P;
       case 3:
         return (reader.readString(offset)) as P;
       case 4:
+        return (reader.readString(offset)) as P;
+      case 5:
         return (reader.readString(offset)) as P;
       default:
         throw 'Illegal propertyIndex';
@@ -363,6 +376,113 @@ extension ChatMessageQueryFilter
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.matches,
       property: 'authorUuid',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      conversationUuidEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'conversationUuid',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      conversationUuidGreaterThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'conversationUuid',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      conversationUuidLessThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'conversationUuid',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      conversationUuidBetween(
+    String lower,
+    String upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'conversationUuid',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      conversationUuidStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'conversationUuid',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      conversationUuidEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'conversationUuid',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      conversationUuidContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'conversationUuid',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterFilterCondition>
+      conversationUuidMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'conversationUuid',
       value: pattern,
       caseSensitive: caseSensitive,
     ));
@@ -802,6 +922,16 @@ extension ChatMessageQueryWhereSortBy
     return addSortByInternal('authorUuid', Sort.desc);
   }
 
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy>
+      sortByConversationUuid() {
+    return addSortByInternal('conversationUuid', Sort.asc);
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy>
+      sortByConversationUuidDesc() {
+    return addSortByInternal('conversationUuid', Sort.desc);
+  }
+
   QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> sortByCreatedAt() {
     return addSortByInternal('createdAt', Sort.asc);
   }
@@ -854,6 +984,16 @@ extension ChatMessageQueryWhereSortThenBy
     return addSortByInternal('authorUuid', Sort.desc);
   }
 
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy>
+      thenByConversationUuid() {
+    return addSortByInternal('conversationUuid', Sort.asc);
+  }
+
+  QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy>
+      thenByConversationUuidDesc() {
+    return addSortByInternal('conversationUuid', Sort.desc);
+  }
+
   QueryBuilder<ChatMessage, ChatMessage, QAfterSortBy> thenByCreatedAt() {
     return addSortByInternal('createdAt', Sort.asc);
   }
@@ -903,6 +1043,12 @@ extension ChatMessageQueryWhereDistinct
     return addDistinctByInternal('authorUuid', caseSensitive: caseSensitive);
   }
 
+  QueryBuilder<ChatMessage, ChatMessage, QDistinct> distinctByConversationUuid(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('conversationUuid',
+        caseSensitive: caseSensitive);
+  }
+
   QueryBuilder<ChatMessage, ChatMessage, QDistinct> distinctByCreatedAt() {
     return addDistinctByInternal('createdAt');
   }
@@ -931,6 +1077,11 @@ extension ChatMessageQueryProperty
     on QueryBuilder<ChatMessage, ChatMessage, QQueryProperty> {
   QueryBuilder<ChatMessage, String, QQueryOperations> authorUuidProperty() {
     return addPropertyNameInternal('authorUuid');
+  }
+
+  QueryBuilder<ChatMessage, String, QQueryOperations>
+      conversationUuidProperty() {
+    return addPropertyNameInternal('conversationUuid');
   }
 
   QueryBuilder<ChatMessage, int, QQueryOperations> createdAtProperty() {
