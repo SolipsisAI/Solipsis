@@ -8,7 +8,7 @@ pub struct _Output {
 }
 
 #[tokio::main]
-pub async fn chat(text: String, conversation_id: String) -> Output {
-    let response = send_chat(text, conversation_id).await;
+pub async fn chat(text: String, conversation_id: Option<String>) -> Output {
+    let response = send_chat(text, conversation_id.unwrap_or(None)).await;
     response
 }

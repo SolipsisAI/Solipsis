@@ -13,7 +13,7 @@ import 'dart:ffi' as ffi;
 
 abstract class Native {
   Future<Output> chat(
-      {required String text, required String conversationId, dynamic hint});
+      {required String text, String? conversationId, dynamic hint});
 }
 
 class Output {
@@ -33,12 +33,10 @@ class NativeImpl extends FlutterRustBridgeBase<NativeWire> implements Native {
   NativeImpl.raw(NativeWire inner) : super(inner);
 
   Future<Output> chat(
-          {required String text,
-          required String conversationId,
-          dynamic hint}) =>
+          {required String text, String? conversationId, dynamic hint}) =>
       executeNormal(FlutterRustBridgeTask(
-        callFfi: (port_) => inner.wire_chat(
-            port_, _api2wire_String(text), _api2wire_String(conversationId)),
+        callFfi: (port_) => inner.wire_chat(port_, _api2wire_String(text),
+            _api2wire_opt_String(conversationId)),
         parseSuccessData: _wire2api_output,
         constMeta: const FlutterRustBridgeTaskConstMeta(
           debugName: "chat",
@@ -51,6 +49,10 @@ class NativeImpl extends FlutterRustBridgeBase<NativeWire> implements Native {
   // Section: api2wire
   ffi.Pointer<wire_uint_8_list> _api2wire_String(String raw) {
     return _api2wire_uint_8_list(utf8.encoder.convert(raw));
+  }
+
+  ffi.Pointer<wire_uint_8_list> _api2wire_opt_String(String? raw) {
+    return raw == null ? ffi.nullptr : _api2wire_String(raw);
   }
 
   int _api2wire_u8(int raw) {
