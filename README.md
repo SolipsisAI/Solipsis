@@ -111,6 +111,7 @@ export PROJECT_DIR=~/Projects/SolipsisAI/code
 mkdir -p $PROJECT_DIR
 cd $PROJECT_DIR
 
+git clone git@github.com:SolipsisAI/flutter_chat_ui.git
 git clone git@github.com:SolipsisAI/rust-cortex.git
 git clone git@github.com:SolipsisAI/batched-mut-fn.git
 git clone git@github.com:SolipsisAI/Solipsis.git
