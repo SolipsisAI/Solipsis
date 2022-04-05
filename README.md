@@ -42,7 +42,11 @@ sudo apt update && sudo apt install libclang-dev
 ### macOS
 
 ```shell
+# Install llvm
 brew install llvm
+
+# Enable macOS desktop
+flutter config --enable-macos-desktop
 ```
 
 ## Libtorch
