@@ -4,12 +4,12 @@
 
 - [Solipsis](#solipsis)
 - [Development Setup](#development-setup)
-  - [LLVM](#llvm)
-    - [Ubuntu](#ubuntu)
-    - [macOS](#macos)
-  - [Libtorch](#libtorch)
-    - [Linux](#linux)
-    - [macOS](#macos-1)
+  - [Ubuntu](#ubuntu)
+    - [LLVM](#llvm)
+    - [Libtorch](#libtorch)
+  - [macOS](#macos)
+    - [LLVM](#llvm-1)
+    - [Libtorch](#libtorch-1)
 - [Build & Run](#build--run)
   - [Setup Local Dependencies](#setup-local-dependencies)
   - [Prepare the build](#prepare-the-build)
@@ -26,32 +26,23 @@ cargo install flutter_rust_bridge_codegen cbindgen just
 dart pub global activate ffigen
 ```
 
-## LLVM
+## Ubuntu 
+
+### LLVM
 
 LLVM is required for ffigen to work.
 
-### Ubuntu
-
 ```shell
-sudo apt update && sudo apt install libclang-dev
+sudo apt update && sudo apt install libclang-dev clang ninja-build cmake
 
 # Create a symlink in /usr/lib since that's where ffigen looks
 ! test -f /usr/lib/libclang.so && sudo ln -s /usr/lib/llvm-13/lib/libclang.so /usr/lib/libclang.so
+
+# This may not be the right directory, so also try
+! test -f /usr/lib/libclang.so && sudo ln -s /usr/lib/llvm-14/lib/libclang.so /usr/lib/libclang.so
 ```
 
-### macOS
-
-```shell
-# Install llvm
-brew install llvm
-
-# Enable macOS desktop
-flutter config --enable-macos-desktop
-```
-
-## Libtorch
-
-### Linux
+### Libtorch 
 
 This requires `libtorch`. Download from [here](https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-1.10.1%2Bcpu.zip).
 
@@ -74,7 +65,19 @@ export LIBTORCH=$(pwd)/libtorch
 export LD_LIBRARY_PATH=${LIBTORCH}/lib:$LD_LIBRARY_PATH
 ```
 
-### macOS
+## macOS
+
+### LLVM
+
+```shell
+# Install llvm
+brew install llvm
+
+# Enable macOS desktop
+flutter config --enable-macos-desktop
+```
+
+### Libtorch
 
 Go to [PyTorch](https://pytorch.org/get-started/locally/) and in Package -> LibTorch. Click on the link generated.
 
